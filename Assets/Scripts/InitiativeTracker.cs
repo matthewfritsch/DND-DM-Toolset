@@ -83,6 +83,26 @@ public class InitiativeTracker : MonoBehaviour
 		RefreshInitiativeUI();
 	}
 
+	// When the current entry's turn is completed
+	public void CompleteTurn()
+	{
+		// delete front of list
+		dummyData.RemoveAt(0);
+
+		// refresh UI
+		RefreshInitiativeUI();
+	}
+
+	// When a new round begins (clearing the initiative list)
+	public void BeginNewRound()
+	{
+		// delete all data from list
+		dummyData.Clear();
+
+		// refresh UI
+		RefreshInitiativeUI();
+	}
+
 	// This function should generally be called every time the internal data is updated
 	public void RefreshInitiativeUI()
 	{
