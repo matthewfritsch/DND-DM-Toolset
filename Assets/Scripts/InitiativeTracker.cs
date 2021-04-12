@@ -23,28 +23,31 @@ public class InitiativeTracker : MonoBehaviour
 	public GameObject entryPrefab;
 	// Other fields
 	List<DummyStruct> dummyData; // temp stuff
+	[Tooltip("This is the name of the initiative GameObject with the Text component to modify.")]
+	public string initiativeTextObjectName;
+	[Tooltip("This is the name of the character name GameObject with the Text component to modify.")]
+	public string characterTextObjectName;
 
 	// UNITY METHODS
 	void Awake()
 	{
-		GenerateNewData();
+		// Warning that any children of this GameObject may be deleted
+		if (transform.childCount > 0)
+		{
+			Debug.LogWarningFormat("Warning: Any children of gameobject \"{0}\" may be deleted, especially if their name contains" +
+				" the string \"{1}\".", name, entryPrefab.name);
+		}
+
+		// Initialize any fields
+		dummyData = new List<DummyStruct>();
 	}
 
 	void Update()
 	{
-		if (Input.GetKeyDown("space"))
-		{
-			// delete the old gameobjects
-			for (int i = 0; i < transform.childCount; i++)
-			{
-				Destroy(transform.GetChild(i).gameObject);
-			}
-			GenerateNewData();
-		}
 	}
 
 	// METHODS
-	void GenerateNewData()
+	void GenerateRandomData()
 	{
 		// Create the dummyData
 		dummyData = new List<DummyStruct>();
@@ -62,6 +65,44 @@ public class InitiativeTracker : MonoBehaviour
 		{
 			GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
 			newEntry.GetComponent<Text>().text = string.Format("{0}\t\tI: {1}", data.name, data.initiative);
+		}
+	}
+
+	public void AddEntryRandomInitiative(string name)
+	{
+		// generate random initiative
+		int initiative = Random.Range(1, 21);
+
+		// add this new entry into the list
+		dummyData.Add(new DummyStruct(name, initiative));
+
+		// sort the list
+		dummyData.Sort((elem1, elem2) => elem2.initiative - elem1.initiative);
+
+		// refresh the initiative UI
+		RefreshInitiativeUI();
+	}
+
+	// This function should generally be called every time the internal data is updated
+	public void RefreshInitiativeUI()
+	{
+		// Delete the currently shown data (condition: its name contains the same name as entryPrefab)
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (transform.GetChild(i).name.Contains(entryPrefab.name))
+			{
+				Destroy(transform.GetChild(i).gameObject);
+			}
+		}
+
+		// Refresh it with current data
+		foreach (DummyStruct data in dummyData)
+		{
+			// instantiate new GameObject
+			GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
+			// update the text components for name and initiative
+			newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = data.initiative.ToString();
+			newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = data.name;
 		}
 	}
 }

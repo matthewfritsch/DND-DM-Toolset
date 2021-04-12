@@ -763,6 +763,7 @@ GameObject:
   - component: {fileID: 367051515}
   - component: {fileID: 367051516}
   - component: {fileID: 367051517}
+  - component: {fileID: 367051518}
   m_Layer: 0
   m_Name: Content
   m_TagString: InitiativeList
@@ -829,6 +830,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &367051518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367051514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6864fae4f35be8449a6b478de55b89d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entryPrefab: {fileID: 1931030421227585876, guid: 0975a3f2438bab14ab9457898800a319, type: 3}
+  initiativeTextObjectName: CharInit/Val_Init
+  characterTextObjectName: PlayerName
 --- !u!1 &445928042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1266,16 +1282,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 684256771}
-        m_TargetAssemblyTypeName: InitiativeListControl, Assembly-CSharp
-        m_MethodName: add_slow
-        m_Mode: 1
+      - m_Target: {fileID: 367051518}
+        m_TargetAssemblyTypeName: InitiativeTracker, Assembly-CSharp
+        m_MethodName: AddEntryRandomInitiative
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chump 2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &684256769
@@ -2225,16 +2241,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1246793551}
-        m_TargetAssemblyTypeName: InitiativeListControl, Assembly-CSharp
-        m_MethodName: add_quick
-        m_Mode: 1
+      - m_Target: {fileID: 367051518}
+        m_TargetAssemblyTypeName: InitiativeTracker, Assembly-CSharp
+        m_MethodName: AddEntryRandomInitiative
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chump 1
           m_BoolArgument: 0
         m_CallState: 1
 --- !u!114 &1246793549
