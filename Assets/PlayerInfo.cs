@@ -26,23 +26,25 @@ public enum StatusCondition : short{
 public class PlayerInfo{
   private StatusCondition statusCondition;
   private string playerName, characterName, characterClass;
-  private int armorClass, healthPoints, initiative;
+  private int armorClass, currentHealth, maxHealth, initiative;
 //constructor assuming initiative already exists
-  public PlayerInfo(string newPlayerName, string newCharacterName, string newCharacterClass, int newArmorClass, int newHealthPoints, int newInitiative){
+  public PlayerInfo(string newPlayerName, string newCharacterName, string newCharacterClass, int newArmorClass, int newMaxHealth, int newInitiative){
     this.playerName = newPlayerName;
     this.characterName = newCharacterName;
     this.characterClass = newCharacterClass;
     this.armorClass = newArmorClass;
-    this.healthPoints = newHealthPoints;
+    this.maxHealth = newMaxHealth;
+    this.currentHealth = newMaxHealth;
     this.initiative = newInitiative;
   }
 //constructor assuming initiative does not yet exist
-  public PlayerInfo(string newPlayerName, string newCharacterName, string newCharacterClass, int newArmorClass, int newHealthPoints){
+  public PlayerInfo(string newPlayerName, string newCharacterName, string newCharacterClass, int newArmorClass, int newMaxHealth){
     this.playerName = newPlayerName;
     this.characterName = newCharacterName;
     this.characterClass = newCharacterClass;
     this.armorClass = newArmorClass;
-    this.healthPoints = newHealthPoints;
+    this.maxHealth = newMaxHealth;
+    this.currentHealth = newMaxHealth;
     this.initiative = -1;
     this.statusCondition = 0;
   }
@@ -62,9 +64,13 @@ public class PlayerInfo{
   public int getArmorClass(){
     return this.armorClass;
   }
-//accessor for the HP of the player (int32)
-  public int getHealthPoints(){
-    return this.healthPoints;
+//accessor for the max HP of the player (int32)
+  public int getMaxHP(){
+    return this.maxHealth;
+  }
+//accessor for the current HP of the player (int32)
+  public int getCurrentHP(){
+    return this.currentHealth;
   }
 /*
  * accessor for the initiative (int32).
@@ -101,8 +107,12 @@ public class PlayerInfo{
     this.armorClass = newArmorClass;
   }
 //mutator for the HP of the character
-  public void setHealthPoints(int newHealthPoints){
-    this.healthPoints = newHealthPoints;
+  public void setMaxHP(int newMaxHealth){
+    this.maxHealth = newMaxHealth;
+  }
+//mutator for the current HP of the character
+public void setCurrentHP(int newCurrentHP){
+    this.currentHealth = newCurrentHP;
   }
 //mutator for the initiative of the character
   public void setInitiative(int newInitiative){
