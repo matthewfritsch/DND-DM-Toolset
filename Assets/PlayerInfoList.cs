@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-class PlayerInfoList{
+public class PlayerInfoList{
 
   private List<PlayerInfo> pilist;
 //default constructor for a PlayerInfoList (creates an empty list)
