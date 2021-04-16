@@ -842,6 +842,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entryPrefab: {fileID: 1382584469}
+  endTurnHoldingPen: {fileID: 971280017}
+  class_image:
+  - class_name: gunslinger
+    class_image: {fileID: 21300000, guid: acadc6b801c948b4e851b77804c7a6a3, type: 3}
+  - class_name: paladin
+    class_image: {fileID: 21300000, guid: dcf41425f2275764eb6b0049367ebbb4, type: 3}
+  - class_name: ranger
+    class_image: {fileID: 21300000, guid: df4ccd8870d567140b2e89c00e5a5478, type: 3}
+  - class_name: enemy
+    class_image: {fileID: 21300000, guid: 621d3151f4d7dc3448d36174f5c961a8, type: 3}
+  DefaultCharacterImage: {fileID: 21300000, guid: d810a9af75a373c478d308955356ea37, type: 3}
   initiativeTextObjectName: CharInit/Val_Init
   characterTextObjectName: CharName
   characterPlayerName: PlayerName
@@ -1182,7 +1193,6 @@ GameObject:
   - component: {fileID: 684256770}
   - component: {fileID: 684256769}
   - component: {fileID: 684256768}
-  - component: {fileID: 684256771}
   m_Layer: 0
   m_Name: NewParty
   m_TagString: Untagged
@@ -1304,21 +1314,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684256766}
   m_CullTransparentMesh: 1
---- !u!114 &684256771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684256766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ba1657344acaf04f9c8fd522c6d7f34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fast_player: {fileID: 0}
-  slow_player: {fileID: 1382584469}
-  InitiativeList: {fileID: 367051514}
 --- !u!1 &828503710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,7 +1325,6 @@ GameObject:
   - component: {fileID: 828503711}
   - component: {fileID: 828503714}
   - component: {fileID: 828503712}
-  - component: {fileID: 828503715}
   - component: {fileID: 828503713}
   m_Layer: 0
   m_Name: CompleteTurn
@@ -1453,21 +1447,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828503710}
   m_CullTransparentMesh: 1
---- !u!114 &828503715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 828503710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ba1657344acaf04f9c8fd522c6d7f34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fast_player: {fileID: 0}
-  slow_player: {fileID: 0}
-  InitiativeList: {fileID: 367051514}
 --- !u!1 &870999392
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,7 +1602,7 @@ GameObject:
   m_Component:
   - component: {fileID: 971280017}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: CompletedTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2127,7 +2106,6 @@ GameObject:
   - component: {fileID: 1246793550}
   - component: {fileID: 1246793549}
   - component: {fileID: 1246793548}
-  - component: {fileID: 1246793551}
   m_Layer: 0
   m_Name: AddQuick
   m_TagString: Untagged
@@ -2249,21 +2227,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1246793546}
   m_CullTransparentMesh: 1
---- !u!114 &1246793551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1246793546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ba1657344acaf04f9c8fd522c6d7f34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fast_player: {fileID: 1771625598}
-  slow_player: {fileID: 0}
-  InitiativeList: {fileID: 367051514}
 --- !u!1 &1271400068
 GameObject:
   m_ObjectHideFlags: 0
