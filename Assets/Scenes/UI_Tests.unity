@@ -849,23 +849,8 @@ MonoBehaviour:
   characterHealth: HealthDisplay
   characterImage: CharImage
   characterArmor: CharArmor/Val_Armor
---- !u!1 &445928042
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 445928043}
-  m_Layer: 0
-  m_Name: UI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &445928043
+  characterTextObjectName: PlayerName
+
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1435,9 +1420,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 367051518}
-        m_TargetAssemblyTypeName: InitiativeTracker, Assembly-CSharp
-        m_MethodName: CompletePlayerTurn
+      - m_Target: {fileID: 828503715}
+        m_TargetAssemblyTypeName: InitiativeListControl, Assembly-CSharp
+        m_MethodName: complete_turn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1447,7 +1432,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &828503713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1833,9 +1817,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 367051518}
-        m_TargetAssemblyTypeName: InitiativeTracker, Assembly-CSharp
-        m_MethodName: StartNewRound
+      - m_Target: {fileID: 1052177704}
+        m_TargetAssemblyTypeName: kill_children, Assembly-CSharp
+        m_MethodName: kill_all
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1845,7 +1829,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &1052177702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
