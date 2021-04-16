@@ -33,8 +33,10 @@ public class InitiativeTracker : MonoBehaviour
 	[Tooltip("This is the name of the character name GameObject with the Text component to modify.")]
 	public string characterTextObjectName;
 	public string characterPlayerName;
+	public string characterClass;
 	public string characterHealth;
 	public string characterImage;
+	public string characterArmor;
 
 	PlayerInfoList base_list;
 
@@ -93,9 +95,13 @@ public class InitiativeTracker : MonoBehaviour
 			// update the text components for name and initiative
 			newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = p.getPlayerName();
 			newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = p.getCharacterName();
+			newEntry.transform.Find(characterClass).GetComponent<Text>().text = p.getCharacterClass();
 			newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = p.getInitiative().ToString();
+			newEntry.transform.Find(characterArmor).GetComponent<Text>().text = p.getArmorClass().ToString();
 			// TODO: set fill amount to ratio of current over max health
-			newEntry.transform.Find(characterHealth).GetComponent<Image>().fillAmount = 1;// p.getHealthPoints();
+			Transform newHealth = newEntry.transform.Find(characterHealth);
+			newHealth.GetComponentInChildren<Image>().fillAmount = 1;// p.getHealthPoints();
+			newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", p.getHealthPoints(), p.getHealthPoints());
 			// TODO: set image to one related to char class, likely from some image dict
 			// newEntry.transform.Find(characterImage).GetComponent<Image>().sourceImage = ;
 
@@ -170,7 +176,9 @@ public class InitiativeTracker : MonoBehaviour
 		newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = "OMG ENEMY";
 		newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = initiative.ToString();
 		// TODO: set fill amount to ratio of current over max health
-		newEntry.transform.Find(characterHealth).GetComponent<Image>().fillAmount = 1;// p.getHealthPoints();
+		Transform newHealth = newEntry.transform.Find(characterHealth);
+		newHealth.GetComponentInChildren<Image>().fillAmount = 1;// p.getHealthPoints();
+		newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", 10, 10);
 		// TODO: set image to one related to char class, likely from some image dict
 		// newEntry.transform.Find(characterImage).GetComponent<Image>().sourceImage = ;
 
