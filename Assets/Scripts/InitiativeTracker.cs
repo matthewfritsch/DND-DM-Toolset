@@ -23,6 +23,8 @@ public class InitiativeTracker : MonoBehaviour
 	public GameObject entryPrefab;
 	// Other fields
 	List<DummyStruct> dummyData; // temp stuff
+	List<GameObject> linkedListStandIn;
+	PlayerInfoList base_list;
 	[Tooltip("This is the name of the initiative GameObject with the Text component to modify.")]
 	public string initiativeTextObjectName;
 	[Tooltip("This is the name of the character name GameObject with the Text component to modify.")]
@@ -33,7 +35,10 @@ public class InitiativeTracker : MonoBehaviour
 	public string characterImage;
 	public string characterArmor;
 
-	PlayerInfoList base_list;
+	private void Awake() {
+		linkedListStandIn = new List<GameObject>();
+		base_list = new PlayerInfoList();
+	}
 
 	public void GenerateNewParty() {
 		base_list.clearList();
@@ -164,4 +169,4 @@ public class InitiativeTracker : MonoBehaviour
 
 		// DisplayQueue();
 	}
-
+}

@@ -682,7 +682,7 @@ RectTransform:
   - {fileID: 1382584470}
   - {fileID: 1764515509}
   - {fileID: 870999393}
-  m_Father: {fileID: 445928043}
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -849,23 +849,6 @@ MonoBehaviour:
   characterHealth: HealthDisplay
   characterImage: CharImage
   characterArmor: CharArmor/Val_Armor
-  characterTextObjectName: PlayerName
-
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 445928042}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1000, y: 0, z: 1000}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 327797728}
-  - {fileID: 993180925}
-  m_Father: {fileID: 1612121969}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &571149438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,7 +1184,7 @@ GameObject:
   - component: {fileID: 684256768}
   - component: {fileID: 684256771}
   m_Layer: 0
-  m_Name: AddSlow
+  m_Name: NewParty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1346,9 +1329,9 @@ GameObject:
   m_Component:
   - component: {fileID: 828503711}
   - component: {fileID: 828503714}
-  - component: {fileID: 828503713}
   - component: {fileID: 828503712}
   - component: {fileID: 828503715}
+  - component: {fileID: 828503713}
   m_Layer: 0
   m_Name: CompleteTurn
   m_TagString: Untagged
@@ -1420,9 +1403,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 828503715}
-        m_TargetAssemblyTypeName: InitiativeListControl, Assembly-CSharp
-        m_MethodName: complete_turn
+      - m_Target: {fileID: 367051518}
+        m_TargetAssemblyTypeName: InitiativeTracker, Assembly-CSharp
+        m_MethodName: CompletePlayerTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1432,6 +1415,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &828503713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1657,7 +1641,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &993180924
 GameObject:
@@ -1687,8 +1671,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 445928043}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &993180926
 Camera:
@@ -1743,9 +1727,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1052177700}
   - component: {fileID: 1052177703}
-  - component: {fileID: 1052177702}
   - component: {fileID: 1052177701}
-  - component: {fileID: 1052177704}
+  - component: {fileID: 1052177702}
   m_Layer: 0
   m_Name: NewRound
   m_TagString: Untagged
@@ -1817,9 +1800,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1052177704}
-        m_TargetAssemblyTypeName: kill_children, Assembly-CSharp
-        m_MethodName: kill_all
+      - m_Target: {fileID: 367051518}
+        m_TargetAssemblyTypeName: InitiativeTracker, Assembly-CSharp
+        m_MethodName: StartNewRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1829,6 +1812,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1052177702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1850,13 +1834,13 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-  m_UseSpriteMesh: 1
+  m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1052177703
 CanvasRenderer:
@@ -1866,19 +1850,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052177699}
   m_CullTransparentMesh: 1
---- !u!114 &1052177704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052177699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b56c00b0f4de74098cc980a9502eac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  murderous_parent: {fileID: 367051514}
 --- !u!1 &1068664946
 GameObject:
   m_ObjectHideFlags: 0
@@ -2772,9 +2743,8 @@ Transform:
   m_Children:
   - {fileID: 285001945}
   - {fileID: 571149439}
-  - {fileID: 445928043}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1621809298
 GameObject:
