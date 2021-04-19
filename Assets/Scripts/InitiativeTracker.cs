@@ -91,8 +91,8 @@ public class InitiativeTracker : MonoBehaviour {
 			newEntry.transform.Find(characterArmor).GetComponent<Text>().text = p.getArmorClass().ToString();
 			// TODO: set fill amount to ratio of current over max health
 			Transform newHealth = newEntry.transform.Find(characterHealth);
-			newHealth.GetComponentInChildren<Image>().fillAmount = 1;// p.getHealthPoints();
-			newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", p.getHealthPoints(), p.getHealthPoints());
+			newHealth.GetComponentInChildren<Image>().fillAmount = (p.getCurrentHP()/p.getMaxHP());
+			newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", p.getCurrentHP(), p.getMaxHP());
 			// TODO: set image to one related to char class, likely from some image dict
 			if (class_to_image.ContainsKey(p.getCharacterClass().ToLower())) { tmpImage = class_to_image[p.getCharacterClass().ToLower()]; }
 			newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = tmpImage;
