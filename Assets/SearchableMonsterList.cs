@@ -7,8 +7,6 @@ public class SearchableMonsterList : MonoBehaviour
 {
 	// Unity Objects
 	[SerializeField]
-	private Button toggleMenuButton;
-	[SerializeField]
 	private GameObject scrollView;
 
 	// Fields
