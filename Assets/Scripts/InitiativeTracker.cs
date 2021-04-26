@@ -18,6 +18,9 @@ public class InitiativeTracker : MonoBehaviour {
 	// Other fields
 	List<GameObject> linkedListStandIn;
 	List<GameObject> toBeDeleted;
+
+	// TODO: Change PlayerInfo to the common parent
+	Dictionary<GameObject, PlayerInfo> tabToCombatant = new Dictionary<GameObject, PlayerInfo>();
 	// PlayerInfoList base_list;
 	// public Dictionary<string, Sprite> class_to_image = new Dictionary<string, Sprite>();
 
@@ -90,6 +93,9 @@ public class InitiativeTracker : MonoBehaviour {
 			newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = classDict.GetClassImage(p.getCharacterClass());
 
 			linkedListStandIn.Add(newEntry);
+
+			// Debug.Log("New Entry ID: " + newEntry.GetInstanceID().ToString());
+			tabToCombatant[newEntry] = p;
 		}
 
 		UpdateQueue();
@@ -148,6 +154,15 @@ public class InitiativeTracker : MonoBehaviour {
 		}
 	}
 
+	public void KillCombatant(GameObject combatant) {
+		// TODO: Change to common parent
+		Debug.Log("Killing combatant ID: " + combatant.GetInstanceID().ToString());
+		PlayerInfo combatantInfo = tabToCombatant[combatant];
+		linkedListStandIn.Remove(combatant);
+		Destroy(combatant);
+		CombatInitiativeQueue.Instance.RemoveCombatant(combatantInfo);
+	}
+
 	public void StartNewRound() {
 		// Clean board of any remaining players
 		while (gameObject.transform.childCount > 0) {
@@ -159,26 +174,36 @@ public class InitiativeTracker : MonoBehaviour {
 	}
 
 	public void AddRandomEnemy() {
-		// generate random initiative
+
+		// Create Enemy and add to storage list
+		string pn 	= string.Format("The Dungeonmaster");
+		string cn 	= string.Format("Enemy dude");
+		string cl 	= "enemy";
+		int ac 		= Random.Range(1, 43);
+		int hp 		= Random.Range(20, 38);
+
+		PlayerInfo newEnemy = new PlayerInfo(pn, cn, cl, ac, hp);
 		int initiative = Random.Range(1, 71);
+		int status    = Random.Range(0, 16384*2 - 1);
+		newEnemy.setInitiative(initiative);
+		newEnemy.setStatus(status);
+		CombatInitiativeQueue.Instance.AddMonsterToCombat(newEnemy);
+
+		// Create InitiativeTab and save it
 		GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
-		// var tmpImage = DefaultCharacterImage;
 
 		// update the text components for name and initiative
-		newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = "Enemy!";
-		newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = "OMG ENEMY";
-		newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = initiative.ToString();
-		// TODO: set fill amount to ratio of current over max health
+		newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = newEnemy.getPlayerName();
+		newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = newEnemy.getCharacterName();
+		newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = newEnemy.getInitiative().ToString();
 		Transform newHealth = newEntry.transform.Find(characterHealth);
-		newHealth.GetComponentInChildren<Image>().fillAmount = 1;// p.getHealthPoints();
-		newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", 10, 10);
-		// TODO: set image to one related to char class, likely from some image dict
-		// class_to_image.TryGetValue("enemy", out tmpImage);
-		newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = classDict.GetClassImage("enemy");
+		newHealth.GetComponentInChildren<Image>().fillAmount = (newEnemy.getCurrentHP()/newEnemy.getMaxHP());
+		newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", newEnemy.getCurrentHP(), newEnemy.getMaxHP());
+		newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = classDict.GetClassImage(newEnemy.getCharacterClass());
 
 		// add this new entry into the list
 		linkedListStandIn.Add(newEntry);
-
+		tabToCombatant[newEntry] = newEnemy;
 		// sort the list
 		UpdateQueue();
 

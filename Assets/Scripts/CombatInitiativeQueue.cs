@@ -49,14 +49,21 @@ using UnityEngine;
             return _playersInCombat.getList().Concat(_monstersInCombat.getList()).ToList();
         }
 
-        public void RemovePlayerFromCombat(PlayerInfo player) {
-            _playersInCombat.delPlayer(player);
+        // TODO: Replace with common parent type
+        public void RemoveCombatant(PlayerInfo combatant) {
+            // Try to remove from monster list first, then try player list
+            if (!_monstersInCombat.delPlayer(combatant)) {
+                _playersInCombat.delPlayer(combatant);
+            }
         }
+        // public void RemovePlayerFromCombat(PlayerInfo player) {
+        //     _playersInCombat.delPlayer(player);
+        // }
 
-        // TODO: Replace list type with monster specific one
-        public void RemoveMonsterFromCombat(PlayerInfo monster) {
-            _monstersInCombat.delPlayer(monster);
-        }
+        // // TODO: Replace list type with monster specific one
+        // public void RemoveMonsterFromCombat(PlayerInfo monster) {
+        //     _monstersInCombat.delPlayer(monster);
+        // }
 
         // ? This could be used to return some information? Players that survived?
         public void EndCombat() {

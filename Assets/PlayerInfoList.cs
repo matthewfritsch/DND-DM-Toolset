@@ -21,8 +21,8 @@ public class PlayerInfoList{
     pilist.Add(pi);
   }
 //deletes a player by object from the list
-  public void delPlayer(PlayerInfo pi){
-    pilist.Remove(pi);
+  public bool delPlayer(PlayerInfo pi){
+    return pilist.Remove(pi);
   }
 //deletes a player by name from the list
   public void delPlayerByName(string playername){
