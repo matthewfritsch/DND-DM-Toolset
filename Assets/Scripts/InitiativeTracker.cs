@@ -156,7 +156,7 @@ public class InitiativeTracker : MonoBehaviour {
 
 	public void KillCombatant(GameObject combatant) {
 		// TODO: Change to common parent
-		Debug.Log("Killing combatant ID: " + combatant.GetInstanceID().ToString());
+		// Debug.Log("Killing combatant ID: " + combatant.GetInstanceID().ToString());
 		PlayerInfo combatantInfo = tabToCombatant[combatant];
 		linkedListStandIn.Remove(combatant);
 		Destroy(combatant);

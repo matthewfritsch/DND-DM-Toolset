@@ -22,7 +22,7 @@ using UnityEngine;
         protected PlayerInfoList _playersInCombat = new PlayerInfoList();
         // TODO: Replace list type with monster specific one
         protected PlayerInfoList _monstersInCombat = new PlayerInfoList();
-
+        
         public void AddPlayerToCombat(PlayerInfo player) {
             // Debug.Log("Adding player " + player.getPlayerName());
             _playersInCombat.addPlayer(player);
