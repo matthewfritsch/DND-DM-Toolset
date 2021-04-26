@@ -12,23 +12,22 @@ public class SearchableMonsterList : MonoBehaviour
 	private GameObject scrollViewContent;	// target location to add new entries
 	[SerializeField]
 	private GameObject entryPrefab;
+	[SerializeField]
+	private SelectedMonstersList selectedMonstersList; // selected monster handler
 
 	// Fields
 	private PlayerInfoList data; // Currently uses dummy data
-	private Dictionary<Toggle, PlayerInfo> uiPlayerInfoMap; // maps UI elements to PlayerInfo Objects
+	private Dictionary<Button, PlayerInfo> uiPlayerInfoMap; // maps UI elements to PlayerInfo Objects
 
 	// Unity Methods
 	void Start()
 	{
 		// initialize fields
-		uiPlayerInfoMap = new Dictionary<Toggle, PlayerInfo>();
+		uiPlayerInfoMap = new Dictionary<Button, PlayerInfo>();
 
 		// initialize the dummy data and create GameObjects for it
 		InitDummyData();
 		CreateGameObjectsUsingData();
-	}
-	void Update()
-	{
 	}
 
 	// Methods
@@ -36,7 +35,11 @@ public class SearchableMonsterList : MonoBehaviour
 	// toggles the Scroll View between active and inactive
 	public void ToggleScrollView()
 	{
+		// deactivate the main searchable scroll view
 		scrollView.SetActive(!scrollView.activeInHierarchy);
+
+		// deactivate the selectable scroll view
+		selectedMonstersList.gameObject.SetActive(scrollView.activeInHierarchy);
 	}
 
 	// converts data into GameObjects using the entryPrefab to create it.
@@ -58,21 +61,25 @@ public class SearchableMonsterList : MonoBehaviour
 				// create a newEntry in the scrollViewContent GameObject
 				GameObject newEntry = Instantiate(entryPrefab, scrollViewContent.transform);
 
+				// add any function listeners as needed to the UI element
+				Button newEntryButton = newEntry.GetComponent<Button>();
+				newEntryButton.onClick.AddListener(() => SelectMonster(newEntryButton));
+
 				// update the GameObject's text data
-				SearchableListEntryData currentEntryData = newEntry.GetComponent<SearchableListEntryData>();
+				SearchableMonsterListEntryData currentEntryData = newEntry.GetComponent<SearchableMonsterListEntryData>();
 				currentEntryData.MonsterName.text = playerInfo.getCharacterName();
 				currentEntryData.MonsterHealth.text =
 					string.Format("HP: {0} / {1}", playerInfo.getCurrentHP(), playerInfo.getMaxHP());
 				currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", playerInfo.getArmorClass());
 
 				// establish GameObject to PlayerInfo mapping
-				uiPlayerInfoMap.Add(newEntry.GetComponent<Toggle>(), playerInfo);
+				uiPlayerInfoMap.Add(newEntry.GetComponent<Button>(), playerInfo);
 			}
 		}
 	}
 
 	// deletes everything from the scroll view content
-	public void ClearScrollViewContent(bool ignoreSelected = false)
+	public void ClearScrollViewContent()
 	{
 		for (int idx = 0; idx < scrollViewContent.transform.childCount; idx++)
 		{
@@ -81,46 +88,13 @@ public class SearchableMonsterList : MonoBehaviour
 		}
 	}
 
-	// reads from the Content GameObject and returns a PlayerInfoList of all selected PlayerInfos
-	public PlayerInfoList GetSelectedMonsters()
+	// Callback function when a monster is selected to add it to the list of selected monsters
+	public void SelectMonster(Button action)
 	{
-		// create a new empty list
-		PlayerInfoList selectedMonsters = new PlayerInfoList();
+		PlayerInfo selectedMonster = uiPlayerInfoMap[action];
 
-		// loop through the mapping dictionary
-		foreach (KeyValuePair<Toggle, PlayerInfo> pair in uiPlayerInfoMap)
-		{
-			// if a Toggle is switched to On, add that to the list to return
-			if (pair.Key.isOn)
-			{
-				selectedMonsters.addPlayer(pair.Value);
-			}
-		}
-
-		// return the selected monsters
-		return selectedMonsters;
-	}
-
-	// runs GetSelectedMonsters and prints the value that it returns
-	public void PrintSelectedMonsters()
-	{
-		// get the selected monsters
-		PlayerInfoList selectedMonsters = GetSelectedMonsters();
-
-		// create an output string
-		string output = "Selected Monsters: ...\n";
-
-		foreach (PlayerInfo playerInfo in selectedMonsters.getList())
-		{
-			output += string.Format("{0}: HP({1}/{2}), ArmorClass({3})\n",
-				playerInfo.getCharacterName(),
-				playerInfo.getCurrentHP(),
-				playerInfo.getMaxHP(),
-				playerInfo.getArmorClass());
-		}
-
-		// print the output
-		Debug.Log(output);
+		// pass it onto the component that handles selected monsters
+		selectedMonstersList.SelectMonster(selectedMonster);
 	}
 
 	// Helper Methods
