@@ -7,16 +7,16 @@ using TMPro;
 public class updatePlayerList : MonoBehaviour
 {
     public GameObject addPlayerMenu;
-    public GameObject playerTextObj;
+    public GameObject playerTextPrefab;
 
-    private void Start()
+    public void UpdatePL(string PlayerName)
     {
-        
-        //playerText.text = "test";
+        TextMeshProUGUI newName = Instantiate(playerTextPrefab, gameObject.transform).GetComponent<TextMeshProUGUI>();
+        newName.text = PlayerName;
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         TextMeshProUGUI playerText = playerTextObj.GetComponent<TextMeshProUGUI>();
         SaveContent content = addPlayerMenu.GetComponent<SaveContent>();
@@ -25,5 +25,5 @@ public class updatePlayerList : MonoBehaviour
             names += player.getCharacterName() + "\n";
         }
         playerText.text = names;
-    }
+    }*/
 }
