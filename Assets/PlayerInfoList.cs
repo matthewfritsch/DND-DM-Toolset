@@ -33,4 +33,14 @@ public class PlayerInfoList{
       }
     }
   }
+
+  public PlayerInfo getPlayerInfo(string playerName) {
+    foreach (PlayerInfo p in pilist) {
+      if (p.getPlayerName() == playerName) {
+        return p;
+      }
+    }
+
+    return null;
+  }
 }

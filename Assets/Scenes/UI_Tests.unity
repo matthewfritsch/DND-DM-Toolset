@@ -3506,6 +3506,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 327797728}
     m_Modifications:
+    - target: {fileID: 1086154845188243475, guid: 0975a3f2438bab14ab9457898800a319, type: 3}
+      propertyPath: classImageDictionary
+      value: 
+      objectReference: {fileID: 11400000, guid: cb23a9bdbdee63d4b86272b6cccd44e5, type: 2}
     - target: {fileID: 1931030421030296517, guid: 0975a3f2438bab14ab9457898800a319, type: 3}
       propertyPath: m_Layer
       value: 5

@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
-public class EventHandler_PlayerList : MonoBehaviour,
+public class Control_PlayerList : MonoBehaviour,
     IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
-    public GameObject initiativeQueue;
+
+    private GameObject initiativeQueue;
+    public void Start() {
+        initiativeQueue = GameObject.FindWithTag("InitiativeList").gameObject;
+        // Debug.Log("Found " + initiativeQueue);
+    }
     //Detect if a click occurs
     public void OnPointerClick(PointerEventData pointerEventData) {
+        var playerName = transform.GetComponent<TextMeshProUGUI>().text;
+        var player = GlobalPlayers.Instance.list.getPlayerInfo(playerName);
+        Debug.Log("Found character " + player.getCharacterName());
         // Debug.Log(this.name + " Game Object Clicked, ID: " + gameObject.GetInstanceID().ToString());
-
-        gameObject.SendMessageUpwards("KillCombatant", gameObject);
-        //Output to console the clicked GameObject's name and the following message. You can replace this with your own actions for when clicking the GameObject.
+        Assert.IsNotNull(player);
+        initiativeQueue.GetComponent<InitiativeTracker>().AddCombatant(player);
         
     }
     

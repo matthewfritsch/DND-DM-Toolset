@@ -51,7 +51,7 @@ public class InitiativeTracker : MonoBehaviour {
 		StartNewRound();
 		
 		GenerateRandomPlayers();
-		LoadPlayersIntoQueue();
+		// LoadPlayersIntoQueue();
 	}
 
 	void GenerateRandomPlayers() {
@@ -71,36 +71,10 @@ public class InitiativeTracker : MonoBehaviour {
 			newPlayer.setInitiative(initiative);
 			newPlayer.setStatus(status);
 
-			CombatInitiativeQueue.Instance.AddPlayerToCombat(newPlayer);
+			AddCombatant(newPlayer);
+			// CombatInitiativeQueue.Instance.AddToCombat(newPlayer);
 			// pList.addPlayer(newplayer);
 		}
-	}
-
-	void LoadPlayersIntoQueue() {
-		// foreach (PlayerInfo p in CombatInitiativeQueue.Instance.GetCombatants()){
-		foreach (PlayerInfo p in CombatInitiativeQueue.Instance.GetPlayersInCombat()) {
-			GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
-			// var tmpImage = DefaultCharacterImage;
-			// update the text components for name and initiative
-			newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = p.getPlayerName();
-			newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = p.getCharacterName();
-			newEntry.transform.Find(characterClass).GetComponent<Text>().text = p.getCharacterClass();
-			newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = p.getInitiative().ToString();
-			newEntry.transform.Find(characterArmor).GetComponent<Text>().text = p.getArmorClass().ToString();
-			Transform newHealth = newEntry.transform.Find(characterHealth);
-			newHealth.GetComponentInChildren<Image>().fillAmount = (p.getCurrentHP()/p.getMaxHP());
-			newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", p.getCurrentHP(), p.getMaxHP());
-			newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = classDict.GetClassImage(p.getCharacterClass());
-
-			linkedListStandIn.Add(newEntry);
-
-			// Debug.Log("New Entry ID: " + newEntry.GetInstanceID().ToString());
-			tabToCombatant[newEntry] = p;
-		}
-
-		UpdateQueue();
-		DisplayQueue();
-
 	}
 
 	// Call when there is a change in the queue order; new entry, change in init
@@ -115,7 +89,6 @@ public class InitiativeTracker : MonoBehaviour {
 		}
 	}
 
-	// TODO: If new entries can show up mid round, then that needs to be handled
 	void DisplayQueue() {
 		foreach (GameObject item in linkedListStandIn) {
 			// Add the items to the visual queue
@@ -163,6 +136,21 @@ public class InitiativeTracker : MonoBehaviour {
 		CombatInitiativeQueue.Instance.RemoveCombatant(combatantInfo);
 	}
 
+	// TODO: Replace return with common parent type
+	/// <summary>
+	/// 	Adds to global combat queue, creates InitiativePanel and displays it in the initiative queue
+	/// </summary>
+	public void AddCombatant(PlayerInfo combatant, bool isMonster = false) {
+		CombatInitiativeQueue.Instance.AddToCombat(combatant, isMonster);
+
+		GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
+		newEntry.GetComponent<Control_InitiativePanel>().SetInitiativePanel(combatant);
+		linkedListStandIn.Add(newEntry);
+
+		tabToCombatant[newEntry] = combatant;
+		UpdateQueue();
+	}
+
 	public void StartNewRound() {
 		// Clean board of any remaining players
 		while (gameObject.transform.childCount > 0) {
@@ -173,6 +161,8 @@ public class InitiativeTracker : MonoBehaviour {
 		DisplayQueue();
 	}
 
+
+	// TODO: Remove and replace with enemy selection
 	public void AddRandomEnemy() {
 
 		// Create Enemy and add to storage list
@@ -187,26 +177,7 @@ public class InitiativeTracker : MonoBehaviour {
 		int status    = Random.Range(0, 16384*2 - 1);
 		newEnemy.setInitiative(initiative);
 		newEnemy.setStatus(status);
-		CombatInitiativeQueue.Instance.AddMonsterToCombat(newEnemy);
 
-		// Create InitiativeTab and save it
-		GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
-
-		// update the text components for name and initiative
-		newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = newEnemy.getPlayerName();
-		newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = newEnemy.getCharacterName();
-		newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = newEnemy.getInitiative().ToString();
-		Transform newHealth = newEntry.transform.Find(characterHealth);
-		newHealth.GetComponentInChildren<Image>().fillAmount = (newEnemy.getCurrentHP()/newEnemy.getMaxHP());
-		newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", newEnemy.getCurrentHP(), newEnemy.getMaxHP());
-		newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = classDict.GetClassImage(newEnemy.getCharacterClass());
-
-		// add this new entry into the list
-		linkedListStandIn.Add(newEntry);
-		tabToCombatant[newEntry] = newEnemy;
-		// sort the list
-		UpdateQueue();
-
-		// DisplayQueue();
+		AddCombatant(newEnemy, true);
 	}
 }

@@ -12,7 +12,7 @@ public class SaveContent : MonoBehaviour
     public GameObject maxHPInput;
 
     public PlayerInfo newPlayerInfo;
-    public PlayerInfoList globalPlayerList = new PlayerInfoList();
+    // public PlayerInfoList globalPlayerList = new PlayerInfoList();
     public updatePlayerList updatePlayerList;
     // Start is called before the first frame update
     public void SaveInput()
@@ -42,7 +42,8 @@ public class SaveContent : MonoBehaviour
         }
 
         newPlayerInfo = new PlayerInfo(playerName, characterName, characterClass, intArmorClass, intMaxHP);
-        globalPlayerList.addPlayer(newPlayerInfo);
+        // globalPlayerList.addPlayer(newPlayerInfo);
+        GlobalPlayers.Instance.list.addPlayer(newPlayerInfo);
 
         updatePlayerList.UpdatePL(playerName);
 

@@ -22,16 +22,14 @@ using UnityEngine;
         protected PlayerInfoList _playersInCombat = new PlayerInfoList();
         // TODO: Replace list type with monster specific one
         protected PlayerInfoList _monstersInCombat = new PlayerInfoList();
-        
-        public void AddPlayerToCombat(PlayerInfo player) {
-            // Debug.Log("Adding player " + player.getPlayerName());
-            _playersInCombat.addPlayer(player);
-            // return CreateInitiativeTab(player);
-        }
 
-        // TODO: Replace parameter with monster specific
-        public void AddMonsterToCombat(PlayerInfo monster) {
-            _monstersInCombat.addPlayer(monster);
+        // TODO: Replace with common parent type
+        public void AddToCombat(PlayerInfo combatant, bool isMonster = false) {
+            if (isMonster) {
+                _monstersInCombat.addPlayer(combatant);
+            } else {
+                _playersInCombat.addPlayer(combatant);
+            }
         }
 
         // TODO: Replace return with common parent type
