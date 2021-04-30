@@ -19,8 +19,6 @@ public class InitiativeTracker : MonoBehaviour {
 	List<GameObject> linkedListStandIn;
 	List<GameObject> toBeDeleted;
 
-	// TODO: Change PlayerInfo to the common parent
-	Dictionary<GameObject, PlayerInfo> tabToCombatant = new Dictionary<GameObject, PlayerInfo>();
 	// PlayerInfoList base_list;
 	// public Dictionary<string, Sprite> class_to_image = new Dictionary<string, Sprite>();
 
@@ -130,7 +128,7 @@ public class InitiativeTracker : MonoBehaviour {
 	public void KillCombatant(GameObject combatant) {
 		// TODO: Change to common parent
 		// Debug.Log("Killing combatant ID: " + combatant.GetInstanceID().ToString());
-		PlayerInfo combatantInfo = tabToCombatant[combatant];
+		PlayerInfo combatantInfo = combatant.GetComponent<Control_InitiativePanel>().GetCombatant();
 		linkedListStandIn.Remove(combatant);
 		Destroy(combatant);
 		CombatInitiativeQueue.Instance.RemoveCombatant(combatantInfo);
@@ -141,13 +139,17 @@ public class InitiativeTracker : MonoBehaviour {
 	/// 	Adds to global combat queue, creates InitiativePanel and displays it in the initiative queue
 	/// </summary>
 	public void AddCombatant(PlayerInfo combatant, bool isMonster = false) {
-		CombatInitiativeQueue.Instance.AddToCombat(combatant, isMonster);
+		bool addedToCombat = CombatInitiativeQueue.Instance.AddToCombat(combatant, isMonster);
+
+		// Combatant was not added to combat, no InitiativePanel needed
+		if (!addedToCombat) {
+			return;
+		}
 
 		GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
 		newEntry.GetComponent<Control_InitiativePanel>().SetInitiativePanel(combatant);
 		linkedListStandIn.Add(newEntry);
 
-		tabToCombatant[newEntry] = combatant;
 		UpdateQueue();
 	}
 

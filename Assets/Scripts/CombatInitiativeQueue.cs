@@ -24,12 +24,20 @@ using UnityEngine;
         protected PlayerInfoList _monstersInCombat = new PlayerInfoList();
 
         // TODO: Replace with common parent type
-        public void AddToCombat(PlayerInfo combatant, bool isMonster = false) {
+        /// <returns>
+        /// True in case of successfully adding combatant to fight.
+        /// Players cannot have more than one instance the same characters
+        /// </returns>
+        public bool AddToCombat(PlayerInfo combatant, bool isMonster = false) {
+            bool result = false;
             if (isMonster) {
                 _monstersInCombat.addPlayer(combatant);
-            } else {
+                result = true;
+            } else if (!_playersInCombat.containsPlayer(combatant)) {
                 _playersInCombat.addPlayer(combatant);
+                result = true;
             }
+            return result;
         }
 
         // TODO: Replace return with common parent type

@@ -43,4 +43,8 @@ public class PlayerInfoList{
 
     return null;
   }
+
+  public bool containsPlayer(PlayerInfo player) {
+    return pilist.Contains(player);
+  }
 }

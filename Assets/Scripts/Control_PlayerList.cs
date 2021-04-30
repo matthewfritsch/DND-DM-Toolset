@@ -18,7 +18,7 @@ public class Control_PlayerList : MonoBehaviour,
     public void OnPointerClick(PointerEventData pointerEventData) {
         var playerName = transform.GetComponent<TextMeshProUGUI>().text;
         var player = GlobalPlayers.Instance.list.getPlayerInfo(playerName);
-        Debug.Log("Found character " + player.getCharacterName());
+        // Debug.Log("Found character " + player.getCharacterName());
         // Debug.Log(this.name + " Game Object Clicked, ID: " + gameObject.GetInstanceID().ToString());
         Assert.IsNotNull(player);
         initiativeQueue.GetComponent<InitiativeTracker>().AddCombatant(player);
