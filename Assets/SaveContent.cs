@@ -13,7 +13,6 @@ public class SaveContent : MonoBehaviour
 
     public PlayerInfo newPlayerInfo;
     public PlayerInfoList globalPlayerList = new PlayerInfoList();
-    public updatePlayerList updatePlayerList;
     // Start is called before the first frame update
     public void SaveInput()
     {
@@ -28,23 +27,11 @@ public class SaveContent : MonoBehaviour
             return;
         }
 
-        int intArmorClass;
-        int intMaxHP;
-        if (!int.TryParse(armorClass, out intArmorClass))
-        {
-            Debug.Log("invalid Armor Class entry (not integer)");
-            return;
-        }
-        if (!int.TryParse(maxHP, out intMaxHP))
-        {
-            Debug.Log("invalid Max HP entry (not integer)");
-            return;
-        }
+        int intArmorClass = int.Parse(armorClass);
+        int intMaxHP = int.Parse(maxHP);
 
         newPlayerInfo = new PlayerInfo(playerName, characterName, characterClass, intArmorClass, intMaxHP);
         globalPlayerList.addPlayer(newPlayerInfo);
-
-        updatePlayerList.UpdatePL(playerName);
 
         playerNameInput.GetComponent<TMP_InputField>().text = "";
         characterNameInput.GetComponent<TMP_InputField>().text = "";
