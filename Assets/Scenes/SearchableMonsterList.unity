@@ -3220,7 +3220,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 398407834}
         m_TargetAssemblyTypeName: SearchableMonsterList, Assembly-CSharp
         m_MethodName: CreateGameObjectsUsingData
         m_Mode: 0
