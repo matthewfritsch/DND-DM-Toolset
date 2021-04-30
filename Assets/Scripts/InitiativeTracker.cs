@@ -5,29 +5,22 @@ using UnityEngine.UI;
 
 public class InitiativeTracker : MonoBehaviour {
 
-	// Ensures that it can be displayed in the editor
-	[System.Serializable]
-	public struct ClassImagePair {
-		public string class_name;
-		public Sprite class_image;
-	}
-
 	// FIELDS
 	// Unity Objects
 	public GameObject entryPrefab;
 	// Can potentially be used to move them into another visual location
 	[Tooltip("Optional Transform to hold characters that have completed turn")]
 	public Transform endTurnHoldingPen;
-	[Tooltip("Add new element for every class")]
-	public ClassImagePair[] class_image;
-	[Tooltip("Image that will be used when no matching class is found")]
-	public Sprite DefaultCharacterImage;
+
+	[Tooltip("A ScriptableObject that holds the class name, class image dictionary")]
+	public CharClassImage classDict;
 
 	// Other fields
 	List<GameObject> linkedListStandIn;
 	List<GameObject> toBeDeleted;
-	PlayerInfoList base_list;
-	public Dictionary<string, Sprite> class_to_image = new Dictionary<string, Sprite>();
+
+	// PlayerInfoList base_list;
+	// public Dictionary<string, Sprite> class_to_image = new Dictionary<string, Sprite>();
 
 	[Tooltip("This is the name of the initiative GameObject with the Text component to modify.")]
 	public string initiativeTextObjectName;
@@ -42,23 +35,24 @@ public class InitiativeTracker : MonoBehaviour {
 	private void Awake() {
 		linkedListStandIn = new List<GameObject>();
 		toBeDeleted = new List<GameObject>();
-		base_list = new PlayerInfoList();
-		foreach (var item in class_image) {
-			class_to_image[item.class_name] = item.class_image;
-		}
+		// base_list = new PlayerInfoList();
+		// foreach (var item in class_image) {
+		// 	class_to_image[item.class_name] = item.class_image;
+		// }
 	}
 
 	public void GenerateNewParty() {
-		base_list.clearList();
+		CombatInitiativeQueue.Instance.EndCombat();
+		// base_list.clearList();
 		// Clean visual queue
 		CleanQueue();
 		StartNewRound();
 		
-		GenerateRandomPlayers(base_list);
-		LoadPlayersIntoQueue(base_list);
+		GenerateRandomPlayers();
+		// LoadPlayersIntoQueue();
 	}
 
-	void GenerateRandomPlayers(PlayerInfoList pList) {
+	void GenerateRandomPlayers() {
 		// TODO: Remove
 		List<string> tmpList = new List<string> {"Gunslinger", "Paladin", "Ranger", "Wizard", "Priest"};
 		for (int i = 0; i < Random.Range(1,4); i++) {
@@ -69,40 +63,16 @@ public class InitiativeTracker : MonoBehaviour {
 			int ac 		= 3*i;
 			int hp 		= 20 + 3*i;
 
-			PlayerInfo newplayer = new PlayerInfo(pn, cn, cl, ac, hp);
+			PlayerInfo newPlayer = new PlayerInfo(pn, cn, cl, ac, hp);
 			int initiative = Random.Range(1,100);
 			int status    = Random.Range(0, 16384*2 - 1);
-			newplayer.setInitiative(initiative);
-			newplayer.setStatus(status);
+			newPlayer.setInitiative(initiative);
+			newPlayer.setStatus(status);
 
-			pList.addPlayer(newplayer);
+			AddCombatant(newPlayer);
+			// CombatInitiativeQueue.Instance.AddToCombat(newPlayer);
+			// pList.addPlayer(newplayer);
 		}
-	}
-
-	void LoadPlayersIntoQueue(PlayerInfoList list) {
-		foreach (PlayerInfo p in list.getList()){
-			GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
-			var tmpImage = DefaultCharacterImage;
-			// update the text components for name and initiative
-			newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = p.getPlayerName();
-			newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = p.getCharacterName();
-			newEntry.transform.Find(characterClass).GetComponent<Text>().text = p.getCharacterClass();
-			newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = p.getInitiative().ToString();
-			newEntry.transform.Find(characterArmor).GetComponent<Text>().text = p.getArmorClass().ToString();
-			// TODO: set fill amount to ratio of current over max health
-			Transform newHealth = newEntry.transform.Find(characterHealth);
-			newHealth.GetComponentInChildren<Image>().fillAmount = (p.getCurrentHP()/p.getMaxHP());
-			newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", p.getCurrentHP(), p.getMaxHP());
-			// TODO: set image to one related to char class, likely from some image dict
-			if (class_to_image.ContainsKey(p.getCharacterClass().ToLower())) { tmpImage = class_to_image[p.getCharacterClass().ToLower()]; }
-			newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = tmpImage;
-
-			linkedListStandIn.Add(newEntry);
-		}
-
-		UpdateQueue();
-		DisplayQueue();
-
 	}
 
 	// Call when there is a change in the queue order; new entry, change in init
@@ -117,7 +87,6 @@ public class InitiativeTracker : MonoBehaviour {
 		}
 	}
 
-	// TODO: If new entries can show up mid round, then that needs to be handled
 	void DisplayQueue() {
 		foreach (GameObject item in linkedListStandIn) {
 			// Add the items to the visual queue
@@ -141,7 +110,7 @@ public class InitiativeTracker : MonoBehaviour {
 		return leftInit.CompareTo(rightInit);
 	}
 
-	public void CompletePlayerTurn() {
+	public void CompleteCombatantTurn() {
 		if (gameObject.transform.childCount > 0) {
             // Child at the top of the list
             Transform child_to_kill = gameObject.transform.GetChild(0);
@@ -151,45 +120,66 @@ public class InitiativeTracker : MonoBehaviour {
 			child_to_kill.gameObject.SetActive(false);
 			// linkedListStandIn.removeAt(0);
 
-            Debug.Log("Removing player " + child_to_kill.name);
+            // Debug.Log("Removing player " + child_to_kill.name);
             // GameObject.Destroy(child_to_kill.gameObject);
 		}
+	}
+
+	public void KillCombatant(GameObject combatant) {
+		// TODO: Change to common parent
+		// Debug.Log("Killing combatant ID: " + combatant.GetInstanceID().ToString());
+		PlayerInfo combatantInfo = combatant.GetComponent<Control_InitiativePanel>().GetCombatant();
+		linkedListStandIn.Remove(combatant);
+		Destroy(combatant);
+		CombatInitiativeQueue.Instance.RemoveCombatant(combatantInfo);
+	}
+
+	// TODO: Replace return with common parent type
+	/// <summary>
+	/// 	Adds to global combat queue, creates InitiativePanel and displays it in the initiative queue
+	/// </summary>
+	public void AddCombatant(PlayerInfo combatant, bool isMonster = false) {
+		bool addedToCombat = CombatInitiativeQueue.Instance.AddToCombat(combatant, isMonster);
+
+		// Combatant was not added to combat, no InitiativePanel needed
+		if (!addedToCombat) {
+			return;
+		}
+
+		GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
+		newEntry.GetComponent<Control_InitiativePanel>().SetInitiativePanel(combatant);
+		linkedListStandIn.Add(newEntry);
+
+		UpdateQueue();
 	}
 
 	public void StartNewRound() {
 		// Clean board of any remaining players
 		while (gameObject.transform.childCount > 0) {
-			CompletePlayerTurn();
+			CompleteCombatantTurn();
 		}
-		Debug.Log ("You have killed them all!");
+		// Debug.Log ("You have killed them all!");
 
 		DisplayQueue();
 	}
 
+
+	// TODO: Remove and replace with enemy selection
 	public void AddRandomEnemy() {
-		// generate random initiative
+
+		// Create Enemy and add to storage list
+		string pn 	= string.Format("The Dungeonmaster");
+		string cn 	= string.Format("Enemy dude");
+		string cl 	= "enemy";
+		int ac 		= Random.Range(1, 43);
+		int hp 		= Random.Range(20, 38);
+
+		PlayerInfo newEnemy = new PlayerInfo(pn, cn, cl, ac, hp);
 		int initiative = Random.Range(1, 71);
-		GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
-		var tmpImage = DefaultCharacterImage;
+		int status    = Random.Range(0, 16384*2 - 1);
+		newEnemy.setInitiative(initiative);
+		newEnemy.setStatus(status);
 
-		// update the text components for name and initiative
-		newEntry.transform.Find(characterPlayerName).GetComponent<Text>().text = "Enemy!";
-		newEntry.transform.Find(characterTextObjectName).GetComponent<Text>().text = "OMG ENEMY";
-		newEntry.transform.Find(initiativeTextObjectName).GetComponent<Text>().text = initiative.ToString();
-		// TODO: set fill amount to ratio of current over max health
-		Transform newHealth = newEntry.transform.Find(characterHealth);
-		newHealth.GetComponentInChildren<Image>().fillAmount = 1;// p.getHealthPoints();
-		newHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", 10, 10);
-		// TODO: set image to one related to char class, likely from some image dict
-		class_to_image.TryGetValue("enemy", out tmpImage);
-		newEntry.transform.Find(characterImage).GetComponent<Image>().sprite = tmpImage;
-
-		// add this new entry into the list
-		linkedListStandIn.Add(newEntry);
-
-		// sort the list
-		UpdateQueue();
-
-		// DisplayQueue();
+		AddCombatant(newEnemy, true);
 	}
 }
