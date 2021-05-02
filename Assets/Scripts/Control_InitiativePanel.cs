@@ -52,10 +52,10 @@ public class Control_InitiativePanel : MonoBehaviour,
         playerName.GetComponent<Text>().text = managedCombatant.getPlayerName();
         characterName.GetComponent<Text>().text = managedCombatant.getCharacterName();
         characterClass.GetComponent<Text>().text = managedCombatant.getCharacterClass();
-        characterArmor.GetComponent<Text>().text = managedCombatant.getArmorClass().ToString();
+        characterArmor.GetComponent<Text>().text = managedCombatant.getAC().ToString();
         characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
 
-        characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getMaxHP());
+        characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
         characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
 
         characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(managedCombatant.getCharacterClass());
@@ -73,25 +73,25 @@ public class Control_InitiativePanel : MonoBehaviour,
 
     public void ModifyArmorClass(int change) {
         modAC += change;
-        string acString = modAC == 0 ? managedCombatant.getArmorClass().ToString() :
-            string.Format("{0}{1}", managedCombatant.getArmorClass().ToString(), modAC.ToString());
+        string acString = modAC == 0 ? managedCombatant.getAC().ToString() :
+            string.Format("{0}{1}", managedCombatant.getAC().ToString(), modAC.ToString());
         
         characterArmor.GetComponent<Text>().text = acString;
     }
 
     // Positive health changes are heals, negative is damange
-    public void ModifyCurrentHealth(int healthChange) {
-        var newCurrentHP = managedCombatant.getCurrentHP() + healthChange;
+    public void ModifyCurrentHealth(short healthChange) {
+        short newCurrentHP = (short) (managedCombatant.getCurrentHP() + healthChange);
 
         // ? Check to see if newCurrentHP is less than zero
-        if (newCurrentHP > managedCombatant.getMaxHP()) {
-            newCurrentHP = managedCombatant.getMaxHP();
+        if (newCurrentHP > managedCombatant.getHP()) {
+            newCurrentHP = managedCombatant.getHP();
         }
         
         managedCombatant.setCurrentHP(newCurrentHP);
 
-        characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getMaxHP());
-        characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getMaxHP());
+        characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
+        characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getHP());
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public class Control_InitiativePanel : MonoBehaviour,
 
     public void ResetArmor() {
         modAC = 0;
-        characterArmor.GetComponent<Text>().text = managedCombatant.getArmorClass().ToString();
+        characterArmor.GetComponent<Text>().text = managedCombatant.getAC().ToString();
     }
 
     // TODO: Replace return with common parent type

@@ -12,6 +12,8 @@ public class SearchableMonsterList : MonoBehaviour {
     private GameObject entryPrefab;
     [SerializeField]
     private SelectedMonstersList selectedMonstersList; // selected monster handler
+    [SerializeField]
+    private Image backgroundImage; // image used for the background of the menu when it is open
 
     // Fields
     private PlayerInfoList data; // Currently uses dummy data
@@ -31,11 +33,18 @@ public class SearchableMonsterList : MonoBehaviour {
 
     // toggles the Scroll View between active and inactive
     public void ToggleScrollView() {
-        // deactivate the main searchable scroll view
+        // toggle the main searchable scroll view
         scrollView.SetActive(!scrollView.activeInHierarchy);
 
-        // deactivate the selectable scroll view
-        selectedMonstersList.gameObject.SetActive(scrollView.activeInHierarchy);
+        // boolean for checking if the other elements should be active or not, based off the searchable scroll view's active state
+        bool scrollViewActive = scrollView.activeInHierarchy;
+
+        // match the active state of the selectable scroll view with the searchable scroll view
+        selectedMonstersList.gameObject.SetActive(scrollViewActive);
+
+        // match the active state of the background sprite with the searchable scroll view
+        backgroundImage.gameObject.SetActive(scrollViewActive);
+
     }
 
     // converts data into GameObjects using the entryPrefab to create it.
@@ -62,8 +71,8 @@ public class SearchableMonsterList : MonoBehaviour {
                 SearchableMonsterListEntryData currentEntryData = newEntry.GetComponent<SearchableMonsterListEntryData>();
                 currentEntryData.MonsterName.text = playerInfo.getCharacterName();
                 currentEntryData.MonsterHealth.text =
-                    string.Format("HP: {0} / {1}", playerInfo.getCurrentHP(), playerInfo.getMaxHP());
-                currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", playerInfo.getArmorClass());
+                    string.Format("HP: {0} / {1}", playerInfo.getCurrentHP(), playerInfo.getHP());
+                currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", playerInfo.getAC());
 
                 // establish GameObject to PlayerInfo mapping
                 uiPlayerInfoMap.Add(newEntry.GetComponent<Button>(), playerInfo);

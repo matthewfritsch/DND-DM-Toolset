@@ -12,6 +12,8 @@ public class SelectedMonstersList : MonoBehaviour {
     private GameObject controlsObject;
     [SerializeField]
     private Toggle deleteModeToggle;
+    [SerializeField]
+    private InitiativeTracker initiativeTracker;
 
     // Fields
 
@@ -62,8 +64,8 @@ public class SelectedMonstersList : MonoBehaviour {
             SearchableMonsterListEntryData currentEntryData = newEntry.GetComponent<SearchableMonsterListEntryData>();
             currentEntryData.MonsterName.text = monster.getCharacterName();
             currentEntryData.MonsterHealth.text =
-                string.Format("HP: {0} / {1}", monster.getCurrentHP(), monster.getMaxHP());
-            currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", monster.getArmorClass());
+                string.Format("HP: {0} / {1}", monster.getCurrentHP(), monster.getHP());
+            currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", monster.getAC());
             currentEntryData.MonsterCount.gameObject.SetActive(true);
             currentEntryData.MonsterCount.text = count.ToString();
 
@@ -142,12 +144,26 @@ public class SelectedMonstersList : MonoBehaviour {
             // append the info to the output string
             output += string.Format("{0}:    HP: {1} / {2}   AC: {3}\n",
                 monster.getCharacterName(),
-                monster.getCurrentHP(), monster.getMaxHP(),
-                monster.getArmorClass());
+                monster.getCurrentHP(), monster.getHP(),
+                monster.getAC());
         }
 
         // output the output string
         Debug.Log(output);
+    }
+
+    // Adds all of the selected monsters to the initiative queue
+    public void AddSelectedMonstersToInitiativeQueue() {
+        // get the list of all selected monsters
+        PlayerInfoList selectedMonsters = GetSelectedMonsters();
+
+        // use the initiative tracker's function to add the monsters to the initiative queue
+        foreach (PlayerInfo monster in selectedMonsters.getList()) {
+            initiativeTracker.AddCombatant(monster, true /* is monster */);
+        }
+
+        // then all of the selected monsters should be unselected (i.e. cleared up)
+        ClearSelectedMonsters();
     }
 
     // Clears the scroll view content
@@ -156,6 +172,15 @@ public class SelectedMonstersList : MonoBehaviour {
             GameObject child = scrollViewContent.transform.GetChild(idx).gameObject;
             Destroy(child);
         }
+    }
+
+    // Clears all of the selected monsters
+    public void ClearSelectedMonsters() {
+        // the playerInfoCountMap should be emptied, since no monsters are selected
+        playerInfoCountMap.Clear();
+
+        // then the UI should be updated
+        CreateGameObjectsUsingData();
     }
 
     // Updates the count for the monster using an integer

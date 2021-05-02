@@ -64,10 +64,10 @@ public class InitiativeTracker : MonoBehaviour {
 			int hp 		= 20 + 3*i;
 
 			PlayerInfo newPlayer = new PlayerInfo(pn, cn, cl, ac, hp);
-			int initiative = Random.Range(1,100);
-			int status    = Random.Range(0, 16384*2 - 1);
+			short initiative = (short) Random.Range(1,100);
+			short status    = (short) Random.Range(0, 16384*2 - 1);
 			newPlayer.setInitiative(initiative);
-			newPlayer.setStatus(status);
+			newPlayer.setStatusCondition((StatusCondition) status);
 
 			AddCombatant(newPlayer);
 			// CombatInitiativeQueue.Instance.AddToCombat(newPlayer);
@@ -175,10 +175,10 @@ public class InitiativeTracker : MonoBehaviour {
 		int hp 		= Random.Range(20, 38);
 
 		PlayerInfo newEnemy = new PlayerInfo(pn, cn, cl, ac, hp);
-		int initiative = Random.Range(1, 71);
-		int status    = Random.Range(0, 16384*2 - 1);
+		short initiative = (short) Random.Range(1, 71);
+        short status    = (short) Random.Range(0, 16384*2 - 1);
 		newEnemy.setInitiative(initiative);
-		newEnemy.setStatus(status);
+		newEnemy.setStatusCondition((StatusCondition) status);
 
 		AddCombatant(newEnemy, true);
 	}
