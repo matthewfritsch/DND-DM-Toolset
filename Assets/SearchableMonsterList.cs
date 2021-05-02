@@ -16,16 +16,28 @@ public class SearchableMonsterList : MonoBehaviour {
     private Image backgroundImage; // image used for the background of the menu when it is open
 
     // Fields
-    private PlayerInfoList data; // Currently uses dummy data
-    private Dictionary<Button, PlayerInfo> uiPlayerInfoMap; // maps UI elements to PlayerInfo Objects
+    private BeingInfoList data; // Currently uses dummy data
+    private Dictionary<Button, MonsterInfo> uiMonsterInfoMap; // maps UI elements to MonsterInfo Objects
+    private MonsterParser parser;
 
     // Unity Methods
     void Start() {
         // initialize fields
-        uiPlayerInfoMap = new Dictionary<Button, PlayerInfo>();
+        uiMonsterInfoMap = new Dictionary<Button, MonsterInfo>();
 
-        // initialize the dummy data and create GameObjects for it
-        InitDummyData();
+        // -- initialize data --
+        data = new BeingInfoList();
+
+        // parse through the data
+        parser = new MonsterParser(Application.dataPath + "/monsters.csv");
+        List<MonsterInfo> parsedData = parser.read();
+
+        // iterate through parsed data to add to data
+        foreach(MonsterInfo monster in parsedData) {
+            data.addBeing(monster);
+        }
+
+        // update UI
         CreateGameObjectsUsingData();
     }
 
@@ -51,15 +63,15 @@ public class SearchableMonsterList : MonoBehaviour {
     //		this can be filtered by character name
     public void CreateGameObjectsUsingData(string filter = "") {
         // clear the current dictionary
-        uiPlayerInfoMap.Clear();
+        uiMonsterInfoMap.Clear();
 
         // clean up the scroll view content
         ClearScrollViewContent();
 
         // iterate through the data
-        foreach (PlayerInfo playerInfo in data.getList()) {
+        foreach (MonsterInfo monster in data.getList()) {
             // apply filter (case insensitive)
-            if (playerInfo.getCharacterName().ToLower().Contains(filter.ToLower())) {
+            if (monster.getMonsterName().ToLower().Contains(filter.ToLower())) {
                 // create a newEntry in the scrollViewContent GameObject
                 GameObject newEntry = Instantiate(entryPrefab, scrollViewContent.transform);
 
@@ -69,13 +81,13 @@ public class SearchableMonsterList : MonoBehaviour {
 
                 // update the GameObject's text data
                 SearchableMonsterListEntryData currentEntryData = newEntry.GetComponent<SearchableMonsterListEntryData>();
-                currentEntryData.MonsterName.text = playerInfo.getCharacterName();
+                currentEntryData.MonsterName.text = monster.getMonsterName();
                 currentEntryData.MonsterHealth.text =
-                    string.Format("HP: {0} / {1}", playerInfo.getCurrentHP(), playerInfo.getHP());
-                currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", playerInfo.getAC());
+                    string.Format("HP: {0} / {1}", monster.getCurrentHP(), monster.getHP());
+                currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", monster.getAC());
 
-                // establish GameObject to PlayerInfo mapping
-                uiPlayerInfoMap.Add(newEntry.GetComponent<Button>(), playerInfo);
+                // establish GameObject to monster mapping
+                uiMonsterInfoMap.Add(newEntry.GetComponent<Button>(), monster);
             }
         }
     }
@@ -90,26 +102,9 @@ public class SearchableMonsterList : MonoBehaviour {
 
     // Callback function when a monster is selected to add it to the list of selected monsters
     public void SelectMonster(Button action) {
-        PlayerInfo selectedMonster = uiPlayerInfoMap[action];
+        MonsterInfo selectedMonster = uiMonsterInfoMap[action];
 
         // pass it onto the component that handles selected monsters
         selectedMonstersList.SelectMonster(selectedMonster);
-    }
-
-    // Helper Methods
-
-    // initializes the dummy data
-    private void InitDummyData() {
-        // Construct new dummyData
-        data = new PlayerInfoList();
-
-        // Add new data
-        data.addPlayer(new PlayerInfo("MONSTER", "Tanky Being", "MONSTER", 20, 100));
-        data.addPlayer(new PlayerInfo("MONSTER", "Tanky Being 2", "MONSTER", 40, 60));
-        data.addPlayer(new PlayerInfo("MONSTER", "Weak Being", "MONSTER", 5, 20));
-        data.addPlayer(new PlayerInfo("MONSTER", "Weak Being 2", "MONSTER", 10, 10));
-        data.addPlayer(new PlayerInfo("MONSTER", "Boss Monster", "MONSTER", 45, 200));
-        data.addPlayer(new PlayerInfo("MONSTER", "Boss Monster 2", "MONSTER", 65, 400));
-        data.addPlayer(new PlayerInfo("MONSTER", "Boss Monster 3", "MONSTER", 80, 800));
     }
 }
