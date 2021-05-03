@@ -154,12 +154,7 @@ public class SelectedMonstersList : MonoBehaviour {
 
     // Adds all of the selected monsters to the initiative queue
     public void AddSelectedMonstersToInitiativeQueue() {
-        // Debug.LogErrorFormat("AddSelectedMonstersToInitiativeQueue: At the moment, " +
-        //     "this function will not work until the initiative tracker can accept " +
-        //     "either BeingInfo or MonsterInfo.");
-        // return;
-
-        // get the list of all selected monsters
+        // Get the list of all selected monsters
         BeingInfoList selectedMonsters = GetSelectedMonsters();
 
         // use the initiative tracker's function to add the monsters to the initiative queue
