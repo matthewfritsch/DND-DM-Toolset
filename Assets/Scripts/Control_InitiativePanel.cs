@@ -14,17 +14,19 @@ public class Control_InitiativePanel : MonoBehaviour,
 
     // private Color defaultColor = gameObject.GetComponent<Image>().color;
     public CharClassImage classImageDictionary;
+    // TODO: Add monster image dictionary
+    // public MonsterImage monsterImageDictionary;
 
     private Color defaultColor = new Color(0.4f, 0f, .15f, .4f);
     private Color hoverColor = new Color(.4f, 0f, .15f, .5f);
 
     // Local reference to the combatant that this InitiativePanel represents
     // ? If PlayerInfo is being modified in multiple locations, do we need to consider race conditions
-    private PlayerInfo managedCombatant;
+    private BeingInfo managedCombatant;
     private GameObject playerName, characterName, characterClass, characterArmor, characterInitiative, characterHealth, characterImage;
     // Any variables that can be modified in combat and need to be reset when combat finishes
     // The modification amount
-    private int modInitiative = 0, modAC = 0;
+    private short modInitiative = 0, modAC = 0;
 
     /// <summary>
     ///     Get references to all children that can be modified
@@ -45,25 +47,44 @@ public class Control_InitiativePanel : MonoBehaviour,
     //     update displays to match
     // }
 
-    // TODO: Set parameter as parent type
-    public void SetInitiativePanel(PlayerInfo combatant) {
+    public void SetInitiativePanel(BeingInfo combatant) {
         managedCombatant = combatant;
+        if (managedCombatant.GetType() == typeof(MonsterInfo)) {
+            var monster = (MonsterInfo) managedCombatant;
+
+            // ? Set to the monster's challenge rating?
+            playerName.GetComponent<Text>().text = monster.getChallengeRating().ToString();//= monster.getMonsterName();
+            characterName.GetComponent<Text>().text = monster.getMonsterName();//= managedCombatant.getCharacterName();
+            characterClass.GetComponent<Text>().text = monster.getType();
+            characterArmor.GetComponent<Text>().text = managedCombatant.getAC().ToString();
+            characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
+
+            characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
+            characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
+
+            // TODO: Change to read from a monster image dictionary
+            characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(monster.getType());
+
+            return;
+        }
+
+        // Combatant is assumed to be a player
         // Debug.Log(combatant.getPlayerName());
-        playerName.GetComponent<Text>().text = managedCombatant.getPlayerName();
-        characterName.GetComponent<Text>().text = managedCombatant.getCharacterName();
-        characterClass.GetComponent<Text>().text = managedCombatant.getCharacterClass();
+        var player = (PlayerInfo) managedCombatant;
+        playerName.GetComponent<Text>().text = player.getPlayerName();
+        characterName.GetComponent<Text>().text = player.getCharacterName();
+        characterClass.GetComponent<Text>().text = player.getCharacterClass();
         characterArmor.GetComponent<Text>().text = managedCombatant.getAC().ToString();
         characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
 
         characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
         characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
 
-        characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(managedCombatant.getCharacterClass());
-
+        characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(player.getCharacterClass());
     }
 
     // Only show the modification if something other than zero
-    public void ModifyInitiative(int change) {
+    public void ModifyInitiative(short change) {
         modInitiative += change;
         string initString = modInitiative == 0 ? managedCombatant.getInitiative().ToString() :
             string.Format("{0}{1}", managedCombatant.getInitiative().ToString(), modInitiative.ToString());
@@ -71,7 +92,7 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterInitiative.GetComponent<Text>().text = initString;
     }
 
-    public void ModifyArmorClass(int change) {
+    public void ModifyArmorClass(short change) {
         modAC += change;
         string acString = modAC == 0 ? managedCombatant.getAC().ToString() :
             string.Format("{0}{1}", managedCombatant.getAC().ToString(), modAC.ToString());
@@ -113,7 +134,7 @@ public class Control_InitiativePanel : MonoBehaviour,
     }
 
     // TODO: Replace return with common parent type
-    public PlayerInfo GetCombatant() {
+    public BeingInfo GetCombatant() {
         return managedCombatant;
     }
 

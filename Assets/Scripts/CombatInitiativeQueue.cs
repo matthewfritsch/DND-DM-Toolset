@@ -18,74 +18,63 @@ using UnityEngine;
         // // An empty gameobject used to keep the hierarchy clean while running
         // public Transform initiativeQueueTabStorage;
 
-
+        // Would change, except for some nice methods in playerinfolist
         protected PlayerInfoList _playersInCombat = new PlayerInfoList();
-        // TODO: Replace list type with monster specific one
-        protected PlayerInfoList _monstersInCombat = new PlayerInfoList();
+        protected BeingInfoList _monstersInCombat = new BeingInfoList();
 
-        // TODO: Replace with common parent type
         /// <returns>
         /// True in case of successfully adding combatant to fight.
         /// Players cannot have more than one instance the same characters
         /// </returns>
-        public bool AddToCombat(PlayerInfo combatant, bool isMonster = false) {
-            bool result = false;
-            if (isMonster) {
-                _monstersInCombat.addPlayer(combatant);
-                result = true;
-            } else if (!_playersInCombat.containsPlayer(combatant)) {
-                _playersInCombat.addPlayer(combatant);
-                result = true;
+        public bool AddToCombat(BeingInfo combatant) {
+            if (combatant.GetType() == typeof(MonsterInfo)) {
+                _monstersInCombat.addBeing(combatant);
+                return true;
             }
+
+            // Assume that combatant is of type Player
+            if (!_playersInCombat.containsPlayer((PlayerInfo)combatant)) {
+                _playersInCombat.addPlayer((PlayerInfo)combatant);
+                return true;
+            
+            }
+
+            // The combatant that was to be added was a duplicate of a player
+            return false;
+        }
+
+        public List<BeingInfo> GetPlayersInCombat() {
+            List<BeingInfo> result = new List<BeingInfo>();
+            result.AddRange(_playersInCombat.getList());
             return result;
         }
 
-        // TODO: Replace return with common parent type
-        public List<PlayerInfo> GetPlayersInCombat() {
-            return _playersInCombat.getList();
-        }
-
-        // TODO: Replace return with common parent type
-        public List<PlayerInfo> GetMonstersInCombat() {
+        public List<BeingInfo> GetMonstersInCombat() {
             return _monstersInCombat.getList();
         }
 
-        // TODO: Replace return with common parent type
-        public List<PlayerInfo> GetCombatants() {
-            return _playersInCombat.getList().Concat(_monstersInCombat.getList()).ToList();
+        public List<BeingInfo> GetCombatants() {
+            List<BeingInfo> result = new List<BeingInfo>();
+            result.AddRange(_playersInCombat.getList());
+            result.AddRange(_monstersInCombat.getList());
+
+            return result;
         }
 
-        // TODO: Replace with common parent type
-        public void RemoveCombatant(PlayerInfo combatant) {
-            // Try to remove from monster list first, then try player list
-            if (!_monstersInCombat.delPlayer(combatant)) {
-                _playersInCombat.delPlayer(combatant);
+        public void RemoveCombatant(BeingInfo combatant) {
+            if (combatant.GetType() == typeof(MonsterInfo)) {
+                _monstersInCombat.delBeing(combatant);
+                return;
             }
-        }
-        // public void RemovePlayerFromCombat(PlayerInfo player) {
-        //     _playersInCombat.delPlayer(player);
-        // }
 
-        // // TODO: Replace list type with monster specific one
-        // public void RemoveMonsterFromCombat(PlayerInfo monster) {
-        //     _monstersInCombat.delPlayer(monster);
-        // }
+            // Try to remove from monster list first, then try player list
+            _playersInCombat.delPlayer((PlayerInfo)combatant);
+        }
 
         // ? This could be used to return some information? Players that survived?
         public void EndCombat() {
             _playersInCombat.clearList();
             _monstersInCombat.clearList();
         }
-
-        // // TODO: Replace PlayerInfo with player/monster parent class
-        // private GameObject CreateInitiativeTab(PlayerInfo combatant) {
-        //     GameObject newTab = Instantiate(initiativeTab);
-        //     newTab.transform.SetParent(initiativeQueueTabStorage);
-
-        //     // newTab.transform.Find
-
-        //     return newTab;
-
-        // }
 
     }
