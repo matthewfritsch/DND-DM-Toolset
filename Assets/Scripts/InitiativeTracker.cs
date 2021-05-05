@@ -64,10 +64,10 @@ public class InitiativeTracker : MonoBehaviour {
 			int hp 		= 20 + 3*i;
 
 			PlayerInfo newPlayer = new PlayerInfo(pn, cn, cl, ac, hp);
-			int initiative = Random.Range(1,100);
-			int status    = Random.Range(0, 16384*2 - 1);
+			short initiative = (short) Random.Range(1,100);
+			short status    = (short) Random.Range(0, 16384*2 - 1);
 			newPlayer.setInitiative(initiative);
-			newPlayer.setStatus(status);
+			newPlayer.setStatusCondition((StatusCondition) status);
 
 			AddCombatant(newPlayer);
 			// CombatInitiativeQueue.Instance.AddToCombat(newPlayer);
@@ -128,7 +128,7 @@ public class InitiativeTracker : MonoBehaviour {
 	public void KillCombatant(GameObject combatant) {
 		// TODO: Change to common parent
 		// Debug.Log("Killing combatant ID: " + combatant.GetInstanceID().ToString());
-		PlayerInfo combatantInfo = combatant.GetComponent<Control_InitiativePanel>().GetCombatant();
+		BeingInfo combatantInfo = combatant.GetComponent<Control_InitiativePanel>().GetCombatant();
 		linkedListStandIn.Remove(combatant);
 		Destroy(combatant);
 		CombatInitiativeQueue.Instance.RemoveCombatant(combatantInfo);
@@ -138,8 +138,8 @@ public class InitiativeTracker : MonoBehaviour {
 	/// <summary>
 	/// 	Adds to global combat queue, creates InitiativePanel and displays it in the initiative queue
 	/// </summary>
-	public void AddCombatant(PlayerInfo combatant, bool isMonster = false) {
-		bool addedToCombat = CombatInitiativeQueue.Instance.AddToCombat(combatant, isMonster);
+	public void AddCombatant(BeingInfo combatant) {
+		bool addedToCombat = CombatInitiativeQueue.Instance.AddToCombat(combatant);
 
 		// Combatant was not added to combat, no InitiativePanel needed
 		if (!addedToCombat) {
@@ -164,22 +164,24 @@ public class InitiativeTracker : MonoBehaviour {
 	}
 
 
-	// TODO: Remove and replace with enemy selection
-	public void AddRandomEnemy() {
+	// // TODO: Remove and replace with enemy selection
+	// public void AddRandomEnemy() {
 
-		// Create Enemy and add to storage list
-		string pn 	= string.Format("The Dungeonmaster");
-		string cn 	= string.Format("Enemy dude");
-		string cl 	= "enemy";
-		int ac 		= Random.Range(1, 43);
-		int hp 		= Random.Range(20, 38);
+	// 	// Create Enemy and add to storage list
+	// 	string mn 	= string.Format("The Dungeonmaster");
+	// 	string mt 	= string.Format("Enemy dude");
+	// 	string ma 	= "N";
+	// 	Size   ms	= TINY;
+	// 	double cr 	= ;
+	// 	int ac 		= Random.Range(1, 43);
+	// 	int hp 		= Random.Range(20, 38);
 
-		PlayerInfo newEnemy = new PlayerInfo(pn, cn, cl, ac, hp);
-		int initiative = Random.Range(1, 71);
-		int status    = Random.Range(0, 16384*2 - 1);
-		newEnemy.setInitiative(initiative);
-		newEnemy.setStatus(status);
+	// 	MonsterInfo newEnemy = new MonsterInfo(pn, cn, cl, ac, hp);
+	// 	short initiative = (short) Random.Range(1, 71);
+    //     short status    = (short) Random.Range(0, 16384*2 - 1);
+	// 	newEnemy.setInitiative(initiative);
+	// 	newEnemy.setStatusCondition((StatusCondition) status);
 
-		AddCombatant(newEnemy, true);
-	}
+	// 	AddCombatant(newEnemy, true);
+	// }
 }

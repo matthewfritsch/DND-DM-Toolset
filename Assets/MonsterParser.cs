@@ -19,6 +19,10 @@ public class MonsterParser{
             string monsterName = fields[0];
             if(monsterName == "Name") continue;
             Console.WriteLine(monsterName);
+
+            // check fields length before continuing
+            if (fields.Length != 13) continue;
+
             string monsterType = fields[1];
             string monsterAlignment = fields[2];
             Size monsterSize = (Size)Enum.Parse(typeof(Size), fields[3].ToUpper());
