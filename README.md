@@ -4,9 +4,9 @@ Project Members:
 
   Pierson Bian: Product Owner
   
-  Aaron Mandel: Scrum Master
+  Aaron Mandel: Team Member
   
-  Hector Rosas: Team Member
+  Hector Rosas: Scrum Master
   
   Emmanuel Butor: Team Member
   
