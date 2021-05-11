@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-public class BeingInfoList{
 
+[Serializable]
+public class BeingInfoList{
+  [UnityEngine.SerializeField]
   private List<BeingInfo> bilist;
 //default constructor for a BeingInfoList (creates an empty list)
   public BeingInfoList(){

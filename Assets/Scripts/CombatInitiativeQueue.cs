@@ -8,8 +8,8 @@ using UnityEngine;
      *      more than a single copy active.
      *      Read here if interested : http://wiki.unity3d.com/index.php/Singleton
      **/
-
-    public class CombatInitiativeQueue : Singleton<CombatInitiativeQueue> {
+    [System.Serializable]
+    public class CombatInitiativeQueue : Singleton<CombatInitiativeQueue>, ISaveable {
         // Prevent use of class outside of singleton
         protected CombatInitiativeQueue() {}
 
@@ -77,4 +77,19 @@ using UnityEngine;
             _monstersInCombat.clearList();
         }
 
+    // Inherited from ISaveable, turns the players/monsters in combat into saveable data as a string
+    public string CreateSaveData() {
+        // get all of the combatants
+        List<BeingInfo> allCombatants = GetCombatants();
+
+        // save them into a BeingInfoList
+        BeingInfoList allCombatantsBIL = new BeingInfoList();
+        foreach (BeingInfo combatant in allCombatants) {
+            allCombatantsBIL.addBeing(combatant);
+        }
+
+        // return the save data
+        string saveData = JsonUtility.ToJson(allCombatantsBIL);
+        return saveData;
     }
+}
