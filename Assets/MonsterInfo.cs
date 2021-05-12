@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+[Serializable]
 public class MonsterInfo : BeingInfo 
 {
+    [UnityEngine.SerializeField]
     private string monsterName; //Ancient Gold Dragon
+    [UnityEngine.SerializeField]
     private string type; //Dragon
+    [UnityEngine.SerializeField]
     private double CR; //Challenge Rating (30)
 
     public MonsterInfo() : base(){
