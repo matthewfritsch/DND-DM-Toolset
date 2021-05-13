@@ -9,4 +9,11 @@ public interface ISaveable
     /// </summary>
     /// <returns>String representation of data that is saved.</returns>
     public string CreateSaveData();
+
+    /// <summary>
+    ///     Populate a SaveData class with the information that is important and needs to be saved
+    ///     Idea from the unity presistent data tutorial
+    /// </summary>
+    public void PopulateSaveData(SaveData sd);
+    // void LoadFromSaveData(SaveData sd);
 }

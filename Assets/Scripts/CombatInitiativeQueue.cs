@@ -92,4 +92,8 @@ using UnityEngine;
         string saveData = JsonUtility.ToJson(allCombatantsBIL);
         return saveData;
     }
+
+    public void PopulateSaveData(SaveData sd) {
+        sd.s_combatants = GetCombatants();
+    }
 }

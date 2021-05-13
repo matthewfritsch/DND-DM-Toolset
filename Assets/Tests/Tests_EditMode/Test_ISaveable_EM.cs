@@ -125,6 +125,8 @@ class FakeListOfStrings : ISaveable {
 
         return JsonUtility.ToJson(this);
     }
+
+    public void PopulateSaveData(SaveData sd) {}
 }
 
 // mock class for testing, serializing a list of non-primitive objects
@@ -184,4 +186,7 @@ class FakeListOfFakeObjects : ISaveable {
     public string CreateSaveData() {
         return JsonUtility.ToJson(this);
     }
+
+    public void PopulateSaveData(SaveData sd) {}
+    
 }
