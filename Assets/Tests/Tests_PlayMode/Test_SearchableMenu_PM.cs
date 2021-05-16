@@ -26,8 +26,6 @@ public class Test_SearchableMenu_PM {
         SceneManager.UnloadSceneAsync("Menu");
     }
 
-    // Tests will go down here
-
 
     
     /// <summary>
