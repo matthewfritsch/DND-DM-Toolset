@@ -17,6 +17,9 @@ public class Control_InitiativePanel : MonoBehaviour,
     // TODO: Add monster image dictionary
     // public MonsterImage monsterImageDictionary;
 
+    // stat block visual prefab reference
+    public GameObject statBlockVisual;
+
     private Color defaultColor = new Color(0.4f, 0f, .15f, .4f);
     private Color hoverColor = new Color(.4f, 0f, .15f, .5f);
 
@@ -27,6 +30,9 @@ public class Control_InitiativePanel : MonoBehaviour,
     // Any variables that can be modified in combat and need to be reset when combat finishes
     // The modification amount
     private short modInitiative = 0, modAC = 0;
+
+    //for visual stat block visual
+    private GameObject statBlockInstance;
 
     /// <summary>
     ///     Get references to all children that can be modified
@@ -46,6 +52,13 @@ public class Control_InitiativePanel : MonoBehaviour,
     //     check if PlayerInfo has been marked as changed
     //     update displays to match
     // }
+
+    // Update mouse position to enable stat block visual to follow mouse
+    private void Update() {
+        if (statBlockInstance) {
+            statBlockInstance.transform.position = Input.mousePosition;
+        }
+    }
 
     public void SetInitiativePanel(BeingInfo combatant) {
         managedCombatant = combatant;
@@ -144,6 +157,7 @@ public class Control_InitiativePanel : MonoBehaviour,
     public void OnPointerClick(PointerEventData pointerEventData) {
         // Debug.Log(this.name + " Game Object Clicked, ID: " + gameObject.GetInstanceID().ToString());
         gameObject.SendMessageUpwards("KillCombatant", gameObject);
+        Destroy(statBlockInstance);
         //Output to console the clicked GameObject's name and the following message. You can replace this with your own actions for when clicking the GameObject.    
     }
 
@@ -152,9 +166,25 @@ public class Control_InitiativePanel : MonoBehaviour,
         // TODO: Fancy Visual stuff when mouse is over a tab
         gameObject.GetComponent<Image>().color = hoverColor;
 
+        Vector2 startPos = gameObject.transform.position;
+        Quaternion startRot = gameObject.transform.rotation;
+        statBlockInstance = Instantiate(statBlockVisual, startPos, startRot, GameObject.FindGameObjectWithTag("Canvas").transform);
+
+        statBlockInstance.GetComponent<SBVFieldSetter>().setFields(characterName.GetComponent<Text>().text, characterClass.GetComponent<Text>().text, characterArmor.GetComponent<Text>().text, managedCombatant.getCurrentHP() / managedCombatant.getCurrentHP());
+
+        /*playerName.GetComponent<Text>().text;
+        characterName.GetComponent<Text>().text;
+        characterClass.GetComponent<Text>().text;
+        characterArmor.GetComponent<Text>().text;
+        characterInitiative.GetComponent<Text>().text;
+
+        characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
+        characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP() / managedCombatant.getCurrentHP());*/
+
     }
 
     public void OnPointerExit(PointerEventData pointerEventData) {
         gameObject.GetComponent<Image>().color = defaultColor;
+        Destroy(statBlockInstance);
     }
 }

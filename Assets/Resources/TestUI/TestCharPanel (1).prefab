@@ -414,6 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classImageDictionary: {fileID: 11400000, guid: cb23a9bdbdee63d4b86272b6cccd44e5, type: 2}
+  statBlockVisual: {fileID: 5520055987217903341, guid: daa82fe9f8e20ba48a0ec61a68a96a6f, type: 3}
 --- !u!1 &1931030421319777032
 GameObject:
   m_ObjectHideFlags: 0
