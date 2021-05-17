@@ -11,7 +11,7 @@ using UnityEngine;
 public class SaveData {
     public string gameName;
     public int s_testingValue;
-    public List<BeingInfo> s_characters;
+    public List<PlayerInfo> s_characters;
     // TODO: Smarter handling; names of players only, key enemy info only
     public List<BeingInfo> s_combatants;
     // [System.Serializable]

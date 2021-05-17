@@ -127,6 +127,7 @@ class FakeListOfStrings : ISaveable {
     }
 
     public void PopulateSaveData(SaveData sd) {}
+    public void LoadFromSaveData(SaveData sd) {}
 }
 
 // mock class for testing, serializing a list of non-primitive objects
@@ -188,5 +189,6 @@ class FakeListOfFakeObjects : ISaveable {
     }
 
     public void PopulateSaveData(SaveData sd) {}
+    public void LoadFromSaveData(SaveData sd) {}
     
 }

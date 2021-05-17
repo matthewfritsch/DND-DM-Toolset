@@ -16,4 +16,6 @@ public interface ISaveable
     /// </summary>
     public void PopulateSaveData(SaveData sd);
     // void LoadFromSaveData(SaveData sd);
+
+    public void LoadFromSaveData(SaveData sd);
 }

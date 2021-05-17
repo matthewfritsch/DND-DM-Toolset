@@ -96,4 +96,11 @@ using UnityEngine;
     public void PopulateSaveData(SaveData sd) {
         sd.s_combatants = GetCombatants();
     }
+
+    public void LoadFromSaveData(SaveData sd) {
+        EndCombat();
+        foreach (BeingInfo combatant in sd.s_combatants) {
+            AddToCombat(combatant);
+        }
+    }
 }

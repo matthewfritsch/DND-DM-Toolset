@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class Control_Button_ContinueGame : MonoBehaviour {
     // Start is called before the first frame update
-    void Start() {
+    // ? Maybe run on update, bug when save is deleted on load, and return to main menu
+    // void Start() {
+    void Update() {
         if (PlayerPrefs.HasKey(Utils.S_PREF_KEY_SAVE)) {
             // Get the save file with extension
             var saveFilePath = Utils.GetSaveFilePath(PlayerPrefs.GetString(Utils.S_PREF_KEY_SAVE));
@@ -30,10 +32,17 @@ public class Control_Button_ContinueGame : MonoBehaviour {
     ///     Assume that the button will only be capable of calling this if there is a vaild save to be loaded
     /// </summary>
     public void ContinueMostRecentGame() {
-        var saveFilePath = Utils.GetSaveFilePath(PlayerPrefs.GetString(Utils.S_PREF_KEY_SAVE));
+        string saveFile = PlayerPrefs.GetString(Utils.S_PREF_KEY_SAVE);
+        SaveData sd = new SaveData();
+        string dataString;
 
         try {
-        // TODO: Load in the last played save game
+            // Read in data from file and store it in string
+            FileManager.LoadFromFile(saveFile, out dataString);
+            // Copy data from string into SaveData object
+            sd.LoadFromJson(dataString);
+            GlobalSaveManager.Instance.LoadAllData(sd);
+
             SceneManager.LoadScene("Menu");
         } catch (System.Exception) {
             throw;

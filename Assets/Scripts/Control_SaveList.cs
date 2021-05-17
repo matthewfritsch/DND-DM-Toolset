@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Control_SaveList : MonoBehaviour {
     private string[] saveArray;
@@ -25,7 +26,27 @@ public class Control_SaveList : MonoBehaviour {
 
     }
 
-    // TODO: LoadSaveGame to load a selected save game
+    /// <summary>
+    ///     Will load the selected file from the list
+    /// </summary>
+    public void LoadSaveGame() {
+        Toggle selectedSaveFile = GetSelectedToggle();
+        if (selectedSaveFile == null) {
+            return;
+        }
+        var saveFile = selectedSaveFile.GetComponentInChildren<Text>().text;
+
+        string dataString;
+        FileManager.LoadFromFile(saveFile, out dataString);
+        SaveData sd = new SaveData();
+
+        sd.LoadFromJson(dataString);
+        GlobalSaveManager.Instance.LoadAllData(sd);
+        Debug.Log($"Loading {sd.gameName} with {sd.s_testingValue} characters");
+
+        PlayerPrefs.SetString(Utils.S_PREF_KEY_SAVE, saveFile);
+        SceneManager.LoadScene("Menu");
+    }
 
     private void UpdateList() {
         foreach (Transform save in container_saveGame.transform) {
