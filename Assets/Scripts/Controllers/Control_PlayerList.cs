@@ -16,12 +16,21 @@ public class Control_PlayerList : MonoBehaviour,
     }
     //Detect if a click occurs
     public void OnPointerClick(PointerEventData pointerEventData) {
+        // Necessary as pointer is lost on scene change
+        // initiativeQueue = GameObject.FindWithTag("InitiativeList").gameObject;
+        // Assert.IsNotNull(initiativeQueue);
+
         var playerName = transform.GetComponent<TextMeshProUGUI>().text;
-        var player = GlobalPlayers.Instance.list.getPlayerInfo(playerName);
-        // Debug.Log("Found character " + player.getCharacterName());
+        var player = GlobalPlayers.Instance.GetPlayerInfo(playerName);
+        // Debug.Log($"Player Count: {GlobalPlayers.Instance.list.getList().Count}");
+        Debug.Log("Found character " + player.getCharacterName());
         // Debug.Log(this.name + " Game Object Clicked, ID: " + gameObject.GetInstanceID().ToString());
         Assert.IsNotNull(player);
-        initiativeQueue.GetComponent<InitiativeTracker>().AddCombatant(player);
+        // Assert.IsNull(player);
+        GameObject tst1 = GameObject.FindWithTag("InitiativeList");
+        var tst2 = tst1.GetComponent<InitiativeTracker>();
+        tst2.AddCombatant(player);
+        // initiativeQueue.GetComponent<InitiativeTracker>().AddCombatant(player);
         
     }
     

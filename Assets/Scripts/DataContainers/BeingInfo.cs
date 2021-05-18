@@ -44,15 +44,20 @@ public enum Size{
     GARGANTUAN
 }
 
-public abstract class BeingInfo{
-
+[Serializable]
+public abstract class BeingInfo {
+    [UnityEngine.SerializeField]
     protected StatusCondition statusCondition;
+    [UnityEngine.SerializeField]
     protected Alignment alignment;
+    [UnityEngine.SerializeField]
     protected Size size;
+    [UnityEngine.SerializeField]
     protected short HP, AC, currentHP, initiative;
+    [UnityEngine.SerializeField]
     protected short STR, DEX, CON, INT, WIS, CHA;
 
-    public BeingInfo(){
+    public BeingInfo() {
         statusCondition = StatusCondition.NONE;
         alignment = Alignment.UNALIGNED;
         size = Size.MEDIUM;
@@ -73,7 +78,6 @@ public abstract class BeingInfo{
         currentHP = newHP;
         statusCondition = StatusCondition.NONE;
     }
-    
 
     public StatusCondition getStatusCondition(){
         return statusCondition;
@@ -206,5 +210,43 @@ public abstract class BeingInfo{
                 return Alignment.CHAOTIC_EVIL;
         };
         return Alignment.UNALIGNED;
+    }
+
+    // Auto-generate equality functions for checking if two BeingInfos are equal
+
+
+    public override bool Equals(object obj) {
+        return obj is BeingInfo info &&
+               statusCondition == info.statusCondition &&
+               alignment == info.alignment &&
+               size == info.size &&
+               HP == info.HP &&
+               AC == info.AC &&
+               currentHP == info.currentHP &&
+               initiative == info.initiative &&
+               STR == info.STR &&
+               DEX == info.DEX &&
+               CON == info.CON &&
+               INT == info.INT &&
+               WIS == info.WIS &&
+               CHA == info.CHA;
+    }
+
+    public override int GetHashCode() {
+        var hashCode = -1381094205;
+        hashCode = hashCode * -1521134295 + statusCondition.GetHashCode();
+        hashCode = hashCode * -1521134295 + alignment.GetHashCode();
+        hashCode = hashCode * -1521134295 + size.GetHashCode();
+        hashCode = hashCode * -1521134295 + HP.GetHashCode();
+        hashCode = hashCode * -1521134295 + AC.GetHashCode();
+        hashCode = hashCode * -1521134295 + currentHP.GetHashCode();
+        hashCode = hashCode * -1521134295 + initiative.GetHashCode();
+        hashCode = hashCode * -1521134295 + STR.GetHashCode();
+        hashCode = hashCode * -1521134295 + DEX.GetHashCode();
+        hashCode = hashCode * -1521134295 + CON.GetHashCode();
+        hashCode = hashCode * -1521134295 + INT.GetHashCode();
+        hashCode = hashCode * -1521134295 + WIS.GetHashCode();
+        hashCode = hashCode * -1521134295 + CHA.GetHashCode();
+        return hashCode;
     }
 }

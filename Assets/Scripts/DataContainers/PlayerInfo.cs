@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+[Serializable]
 public class PlayerInfo : BeingInfo{
-  
-  private string playerName, characterName, characterClass;
+
+    [UnityEngine.SerializeField]
+    private string playerName, characterName, characterClass;
 //constructor assuming initiative already exists
   public PlayerInfo(string newPlayerName, string newCharacterName, string newCharacterClass, short newArmorClass, short newMaxHealth, short newInitiative) : base(){
     this.playerName = newPlayerName;

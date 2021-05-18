@@ -42,10 +42,11 @@ public class SaveContent : MonoBehaviour
         }
 
         newPlayerInfo = new PlayerInfo(playerName, characterName, characterClass, intArmorClass, intMaxHP);
+        // Debug.Log($"Adding {playerName}, {characterName}: {newPlayerInfo.getPlayerName()}");
         // globalPlayerList.addPlayer(newPlayerInfo);
-        GlobalPlayers.Instance.list.addPlayer(newPlayerInfo);
+        GlobalPlayers.Instance.AddPlayer(newPlayerInfo);
 
-        updatePlayerList.UpdatePL(playerName);
+        // updatePlayerList.UpdatePL(playerName);
 
         playerNameInput.GetComponent<TMP_InputField>().text = "";
         characterNameInput.GetComponent<TMP_InputField>().text = "";
