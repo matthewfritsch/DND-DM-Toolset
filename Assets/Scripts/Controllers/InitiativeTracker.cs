@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class InitiativeTracker : MonoBehaviour {
+// public class InitiativeTracker : Singleton<InitiativeTracker> {
 
 	// FIELDS
 	// Unity Objects
@@ -35,45 +36,33 @@ public class InitiativeTracker : MonoBehaviour {
 	private void Awake() {
 		linkedListStandIn = new List<GameObject>();
 		toBeDeleted = new List<GameObject>();
-		// base_list = new PlayerInfoList();
-		// foreach (var item in class_image) {
-		// 	class_to_image[item.class_name] = item.class_image;
-		// }
+
+		// Load any combatants that have been prepared by save
+		StartNewCombat(CombatInitiativeQueue.Instance.GetCombatants());
 	}
 
-	public void GenerateNewParty() {
-		CombatInitiativeQueue.Instance.EndCombat();
-		// base_list.clearList();
-		// Clean visual queue
-		CleanQueue();
-		StartNewRound();
-		
-		GenerateRandomPlayers();
-		// LoadPlayersIntoQueue();
-	}
+	// void GenerateRandomPlayers() {
+	// 	// TODO: Remove
+	// 	List<string> tmpList = new List<string> {"Gunslinger", "Paladin", "Ranger", "Wizard", "Priest"};
+	// 	for (int i = 0; i < Random.Range(1,4); i++) {
+	// 		string pn 	= string.Format("Player {0}", i);
+	// 		string cn 	= string.Format("Chumpo {0}", i);
+	// 		string cl 	= tmpList[Random.Range(0, tmpList.Count-1)];
+	// 		// string cl 	= "Gunslinger";
+	// 		int ac 		= 3*i;
+	// 		int hp 		= 20 + 3*i;
 
-	void GenerateRandomPlayers() {
-		// TODO: Remove
-		List<string> tmpList = new List<string> {"Gunslinger", "Paladin", "Ranger", "Wizard", "Priest"};
-		for (int i = 0; i < Random.Range(1,4); i++) {
-			string pn 	= string.Format("Player {0}", i);
-			string cn 	= string.Format("Chumpo {0}", i);
-			string cl 	= tmpList[Random.Range(0, tmpList.Count-1)];
-			// string cl 	= "Gunslinger";
-			int ac 		= 3*i;
-			int hp 		= 20 + 3*i;
+	// 		PlayerInfo newPlayer = new PlayerInfo(pn, cn, cl, ac, hp);
+	// 		short initiative = (short) Random.Range(1,100);
+	// 		short status    = (short) Random.Range(0, 16384*2 - 1);
+	// 		newPlayer.setInitiative(initiative);
+	// 		newPlayer.setStatusCondition((StatusCondition) status);
 
-			PlayerInfo newPlayer = new PlayerInfo(pn, cn, cl, ac, hp);
-			short initiative = (short) Random.Range(1,100);
-			short status    = (short) Random.Range(0, 16384*2 - 1);
-			newPlayer.setInitiative(initiative);
-			newPlayer.setStatusCondition((StatusCondition) status);
-
-			AddCombatant(newPlayer);
-			// CombatInitiativeQueue.Instance.AddToCombat(newPlayer);
-			// pList.addPlayer(newplayer);
-		}
-	}
+	// 		AddCombatant(newPlayer);
+	// 		// CombatInitiativeQueue.Instance.AddToCombat(newPlayer);
+	// 		// pList.addPlayer(newplayer);
+	// 	}
+	// }
 
 	// Call when there is a change in the queue order; new entry, change in init
 	// Preferably after all changes are complete
@@ -161,6 +150,17 @@ public class InitiativeTracker : MonoBehaviour {
 		// Debug.Log ("You have killed them all!");
 
 		DisplayQueue();
+	}
+
+	public void StartNewCombat(List<BeingInfo> combatants) {
+		CleanQueue();
+		foreach (BeingInfo c in combatants) {
+			GameObject newEntry = Instantiate(entryPrefab, gameObject.transform);
+			newEntry.GetComponent<Control_InitiativePanel>().SetInitiativePanel(c);
+			linkedListStandIn.Add(newEntry);
+		}
+
+		UpdateQueue();
 	}
 
 

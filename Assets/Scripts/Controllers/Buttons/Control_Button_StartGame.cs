@@ -34,6 +34,8 @@ public class Control_Button_StartGame : MonoBehaviour {
             FileManager.WriteToFile(gameName, sd.ToJson());
 
             PlayerPrefs.SetString(Utils.S_PREF_KEY_SAVE, gameName);
+            // Load the new save to clean any previous data from scene
+            GlobalSaveManager.Instance.LoadAllData(sd);
             SceneManager.LoadScene("Menu");
         }
     }

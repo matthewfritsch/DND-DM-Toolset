@@ -5,12 +5,18 @@ using UnityEngine;
 
 /// <summary>
 ///     Global manager for all items that need to be saved.
-///     If something wants to be saved, it must add itself to the list on Awake() or similar
+///     If something wants to be saved, either explicitly add a reference to the list, or 
+///     it must add itself to the list on Awake() or similar.
+///     ! Careful of duplicate entires, and of order of saving/loading if there are dependencies
 /// </summary>
 public class GlobalSaveManager : Singleton<GlobalSaveManager> {
     protected GlobalSaveManager() {}
 
-    private HashSet<ISaveable> toBeSaved = new HashSet<ISaveable>();
+    private List<ISaveable> toBeSaved = new List<ISaveable>();
+    void Awake() {
+        toBeSaved.Add(GlobalPlayers.Instance);
+        toBeSaved.Add(CombatInitiativeQueue.Instance);
+    }
 
     public void RegisterToBeSaved(ISaveable reference) {
         toBeSaved.Add(reference);

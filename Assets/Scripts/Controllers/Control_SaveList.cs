@@ -38,6 +38,7 @@ public class Control_SaveList : MonoBehaviour {
 
         string dataString;
         FileManager.LoadFromFile(saveFile, out dataString);
+        Debug.Log($"Loading {dataString}");
         SaveData sd = new SaveData();
 
         sd.LoadFromJson(dataString);

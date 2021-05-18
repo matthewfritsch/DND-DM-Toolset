@@ -13,7 +13,7 @@ public class Control_Button_SaveGame : MonoBehaviour {
         SaveData sd = new SaveData();
         sd.gameName = saveName;
         // Just some numbers to see different stuff
-        sd.s_testingValue = GlobalPlayers.Instance.list.getList().Count;
+        sd.s_testingValue = GlobalPlayers.Instance.playerNames.Count;
 
         // Save all data to the SaveData object
         GlobalSaveManager.Instance.SaveAllData(sd);

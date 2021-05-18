@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
     /** 
      *      Contains all classes that need to be accessed globally, and should not have
@@ -10,17 +11,22 @@ using UnityEngine;
      **/
     [System.Serializable]
     public class CombatInitiativeQueue : Singleton<CombatInitiativeQueue>, ISaveable {
+        // Would change, except for some nice methods in playerinfolist
+        protected PlayerInfoList _playersInCombat = new PlayerInfoList();
+        protected BeingInfoList _monstersInCombat = new BeingInfoList();
+        // private GameObject initiativeQueue;
+
         // Prevent use of class outside of singleton
         protected CombatInitiativeQueue() {}
+        public void Awake() {
+            // GlobalSaveManager.Instance.RegisterToBeSaved(this);
+            // initiativeQueue = GameObject.FindWithTag("InitiativeList").gameObject;
+        }
 
         // // The initiative tab prefab
         // public GameObject initiativeTab;
         // // An empty gameobject used to keep the hierarchy clean while running
         // public Transform initiativeQueueTabStorage;
-
-        // Would change, except for some nice methods in playerinfolist
-        protected PlayerInfoList _playersInCombat = new PlayerInfoList();
-        protected BeingInfoList _monstersInCombat = new BeingInfoList();
 
         /// <returns>
         /// True in case of successfully adding combatant to fight.
@@ -94,13 +100,29 @@ using UnityEngine;
     }
 
     public void PopulateSaveData(SaveData sd) {
-        sd.s_combatants = GetCombatants();
+        foreach (PlayerInfo c_player in _playersInCombat.getList()) {
+            sd.s_player_combatants.Add(c_player.GetHashCode());
+        }
+
+        List<MonsterInfo> monList = _monstersInCombat.getList().Cast<MonsterInfo>().ToList();
+        foreach (MonsterInfo c_monster in monList) {
+            sd.s_monster_combatants.Add(c_monster);
+        }
     }
 
     public void LoadFromSaveData(SaveData sd) {
+        // Remove any stragglers from some other save
         EndCombat();
-        foreach (BeingInfo combatant in sd.s_combatants) {
-            AddToCombat(combatant);
+        foreach (MonsterInfo monst in sd.s_monster_combatants) {
+            AddToCombat(ObjectCopier.DeepClone<MonsterInfo>(monst));
+        }
+
+        foreach (int playerId in sd.s_player_combatants) {
+            // ? Potential problem if GlobalPlayers is loaded after InitiativeQueue
+            // ? in that players wont be loaded into queue
+            PlayerInfo pC = GlobalPlayers.Instance.GetPlayerInfo(playerId);
+            Assert.IsNotNull(pC);
+            AddToCombat(pC);
         }
     }
 }

@@ -45,7 +45,7 @@ public enum Size{
 }
 
 [Serializable]
-public abstract class BeingInfo : UnityEngine.Object{
+public abstract class BeingInfo {
     [UnityEngine.SerializeField]
     protected StatusCondition statusCondition;
     [UnityEngine.SerializeField]
@@ -57,7 +57,7 @@ public abstract class BeingInfo : UnityEngine.Object{
     [UnityEngine.SerializeField]
     protected short STR, DEX, CON, INT, WIS, CHA;
 
-    public BeingInfo(){
+    public BeingInfo() {
         statusCondition = StatusCondition.NONE;
         alignment = Alignment.UNALIGNED;
         size = Size.MEDIUM;
@@ -78,7 +78,6 @@ public abstract class BeingInfo : UnityEngine.Object{
         currentHP = newHP;
         statusCondition = StatusCondition.NONE;
     }
-    
 
     public StatusCondition getStatusCondition(){
         return statusCondition;

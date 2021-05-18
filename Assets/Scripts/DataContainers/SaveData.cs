@@ -11,9 +11,11 @@ using UnityEngine;
 public class SaveData {
     public string gameName;
     public int s_testingValue;
-    public List<PlayerInfo> s_characters;
+    public List<PlayerInfo> s_characters = new List<PlayerInfo>();
     // TODO: Smarter handling; names of players only, key enemy info only
-    public List<BeingInfo> s_combatants;
+    public List<MonsterInfo> s_monster_combatants = new List<MonsterInfo>();
+    // Store Hash code for each player, to be used with master player list to load players back into combat
+    public List<int> s_player_combatants = new List<int>();
     // [System.Serializable]
     // public struct CombatantInfo {
     //     public string c_name;
