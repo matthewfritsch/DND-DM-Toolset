@@ -6,6 +6,7 @@ TagManager:
   tags:
   - InitiativeList
   - PlayerList
+  - DeletionToggle
   layers:
   - Default
   - TransparentFX

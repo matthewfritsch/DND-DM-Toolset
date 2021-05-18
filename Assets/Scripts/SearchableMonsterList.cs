@@ -43,6 +43,7 @@ public class SearchableMonsterList : MonoBehaviour {
 
     // Methods
 
+    // TODO: Remove as no longer necessary?
     // toggles the Scroll View between active and inactive
     public void ToggleScrollView() {
         // toggle the main searchable scroll view

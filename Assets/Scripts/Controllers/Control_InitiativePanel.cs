@@ -14,6 +14,7 @@ public class Control_InitiativePanel : MonoBehaviour,
 
     // private Color defaultColor = gameObject.GetComponent<Image>().color;
     public CharClassImage classImageDictionary;
+    public GameObject deletionToggle;
     // TODO: Add monster image dictionary
     // public MonsterImage monsterImageDictionary;
 
@@ -29,7 +30,7 @@ public class Control_InitiativePanel : MonoBehaviour,
     private short modInitiative = 0, modAC = 0;
 
     /// <summary>
-    ///     Get references to all children that can be modified
+    ///     Get references to all children that can be modified and find the toggle that can delete it
     /// </summary>
     public void Awake() {
         playerName = transform.Find("PlayerName").gameObject;
@@ -39,6 +40,8 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterInitiative = transform.Find("CharInit/Val_Init").gameObject;
         characterHealth = transform.Find("HealthDisplay").gameObject;
         characterImage = transform.Find("CharImage").gameObject;
+
+        deletionToggle = GameObject.FindWithTag("DeletionToggle").gameObject;
     }
 
     // ? PlayerInfo could have some variable that marks that there has been a change
@@ -142,9 +145,10 @@ public class Control_InitiativePanel : MonoBehaviour,
 
     //Detect if a click occurs
     public void OnPointerClick(PointerEventData pointerEventData) {
-        // Debug.Log(this.name + " Game Object Clicked, ID: " + gameObject.GetInstanceID().ToString());
-        gameObject.SendMessageUpwards("KillCombatant", gameObject);
-        //Output to console the clicked GameObject's name and the following message. You can replace this with your own actions for when clicking the GameObject.    
+        // If there is no deletion toggle, or if there is one and it is on, then allow deletion on click
+        if (!deletionToggle || deletionToggle.GetComponent<Toggle>().isOn) {
+            gameObject.SendMessageUpwards("KillCombatant", gameObject);
+        }
     }
 
     // Detect if mouse hovers over InitativeTab
