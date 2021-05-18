@@ -30,16 +30,22 @@ public class SelectedMonstersList : MonoBehaviour {
     }
 
     void Update() {
-        // set the controls object inactive if there are no selected monsters
+        // set the controls object inactive if there are no selected monsters, and set self to be invisible
         if (uiMonsterInfoMap.Count <= 0 && controlsObject.activeInHierarchy) {
             // set the toggle to be off first
             deleteModeToggle.isOn = false;
 
             controlsObject.SetActive(false);
+
+            // also make self invisible
+            GetComponent<Image>().enabled = false;
         }
-        // set the controls object active if there are selected monsters
+        // set the controls object active if there are selected monsters and set self to be visible
         else if (uiMonsterInfoMap.Count >= 1 && !controlsObject.activeInHierarchy) {
             controlsObject.SetActive(true);
+
+            // make self visible
+            GetComponent<Image>().enabled = true;
         }
     }
 
@@ -60,19 +66,14 @@ public class SelectedMonstersList : MonoBehaviour {
             // create a newEntry in the scrollViewContent GameObject
             GameObject newEntry = Instantiate(entryPrefab, scrollViewContent.transform);
 
-            // update the GameObject's text data and other info
+            // update the GameObject's information using the monsterinfo
             SearchableMonsterListEntryData currentEntryData = newEntry.GetComponent<SearchableMonsterListEntryData>();
-            currentEntryData.MonsterName.text = monster.getMonsterName();
-            currentEntryData.MonsterHealth.text =
-                string.Format("HP: {0} / {1}", monster.getCurrentHP(), monster.getHP());
-            currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", monster.getAC());
-            currentEntryData.MonsterCount.gameObject.SetActive(true);
-            currentEntryData.MonsterCount.text = count.ToString();
+            currentEntryData.FormatUsingMonster(monster, count);
 
             // -- add any function listeners as needed to the UI element --
             // update monster count if the inputfield is updated
-            currentEntryData.MonsterCount.onEndEdit.AddListener(delegate {
-                UpdateMonsterCount(monster, currentEntryData.MonsterCount.text);
+            currentEntryData.monsterCount.onEndEdit.AddListener(delegate {
+                UpdateMonsterCount(monster, currentEntryData.monsterCount.text);
             });
 
             // if a selected monster is clicked and delete mode is on, then delete the monster
@@ -220,7 +221,7 @@ public class SelectedMonstersList : MonoBehaviour {
 					 * - Get the InputField
 					 * - Set the text of the InputField to its original value in the monsterInfoCountMap.
 					 */
-                    pair.Key.gameObject.GetComponent<SearchableMonsterListEntryData>().MonsterCount.text
+                    pair.Key.gameObject.GetComponent<SearchableMonsterListEntryData>().monsterCount.text
                         = monsterInfoCountMap[monster].ToString();
                     break;
                 }
