@@ -79,12 +79,9 @@ public class SearchableMonsterList : MonoBehaviour {
                 Button newEntryButton = newEntry.GetComponent<Button>();
                 newEntryButton.onClick.AddListener(() => SelectMonster(newEntryButton));
 
-                // update the GameObject's text data
+                // update the GameObject's information using the monsterinfo
                 SearchableMonsterListEntryData currentEntryData = newEntry.GetComponent<SearchableMonsterListEntryData>();
-                currentEntryData.MonsterName.text = monster.getMonsterName();
-                currentEntryData.MonsterHealth.text =
-                    string.Format("HP: {0} / {1}", monster.getCurrentHP(), monster.getHP());
-                currentEntryData.MonsterArmorClass.text = string.Format("Armor Class: {0}", monster.getAC());
+                currentEntryData.FormatUsingMonster(monster);
 
                 // establish GameObject to monster mapping
                 uiMonsterInfoMap.Add(newEntry.GetComponent<Button>(), monster);
