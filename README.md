@@ -6,11 +6,11 @@ Project Members:
   
   Aaron Mandel: Team Member
   
-  Hector Rosas: Scrum Master
+  Hector Rosas: Team Member
   
   Emmanuel Butor: Team Member
   
-  Matthew Fritsch: Team Member
+  Matthew Fritsch: Scrum Master
 
 
 ## Repository Structure
