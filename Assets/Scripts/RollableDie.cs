@@ -15,8 +15,7 @@ public class RollableDie : MonoBehaviour
     /// Text object that displays what was rolled.
     /// This must be assigned in the inspector.
     /// </summary>
-    [SerializeField]
-    protected TMP_Text rollResultText;
+    public TMP_Text rollResultText;
 
     /// <summary>
     /// Component that is responsible for handling the total sum of die rolls.
@@ -30,8 +29,7 @@ public class RollableDie : MonoBehaviour
     /// This is the highest number that can be rolled on the die, which
     /// is set in the inspector (e.g. D2 should have maxNumber = 2).
     /// </summary>
-    [SerializeField]
-    protected int maxNumber = 2; // default value is 2
+    public int maxNumber = 2; // default value is 2
 
     /// <summary>
     /// This is the minimum roll value that can be rolled on the die.
