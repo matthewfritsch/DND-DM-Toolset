@@ -16,13 +16,13 @@ public class RollableDie : MonoBehaviour
     /// This must be assigned in the inspector.
     /// </summary>
     [SerializeField]
-    private TMP_Text rollResultText;
+    protected TMP_Text rollResultText;
 
     /// <summary>
     /// Component that is responsible for handling the total sum of die rolls.
     /// This is assigned in the Awake() function using GameObject.Find().
     /// </summary>
-    private RollableDieSum sumObject;
+    protected RollableDieSum sumObject;
 
     // == Fields ==
 
@@ -31,7 +31,7 @@ public class RollableDie : MonoBehaviour
     /// is set in the inspector (e.g. D2 should have maxNumber = 2).
     /// </summary>
     [SerializeField]
-    private int maxNumber = 2; // default value is 2
+    protected int maxNumber = 2; // default value is 2
 
     /// <summary>
     /// This is the minimum roll value that can be rolled on the die.
@@ -43,7 +43,7 @@ public class RollableDie : MonoBehaviour
     /// <summary>
     /// For RollableDie, this function is used to instantiate fields.
     /// </summary>
-    private void Awake() {
+    protected void Awake() {
         sumObject = GameObject.Find("TotalSumText").GetComponent<RollableDieSum>();
     }
 
