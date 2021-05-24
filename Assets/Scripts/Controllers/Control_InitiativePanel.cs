@@ -18,6 +18,9 @@ public class Control_InitiativePanel : MonoBehaviour,
     // TODO: Add monster image dictionary
     // public MonsterImage monsterImageDictionary;
 
+    // stat block visual prefab reference
+    public GameObject statBlockVisual;
+
     private Color defaultColor = new Color(0.4f, 0f, .15f, .4f);
     private Color hoverColor = new Color(.4f, 0f, .15f, .5f);
 
@@ -28,6 +31,9 @@ public class Control_InitiativePanel : MonoBehaviour,
     // Any variables that can be modified in combat and need to be reset when combat finishes
     // The modification amount
     private short modInitiative = 0, modAC = 0;
+
+    //for visual stat block visual
+    private GameObject statBlockInstance;
 
     /// <summary>
     ///     Get references to all children that can be modified and find the toggle that can delete it
@@ -49,6 +55,13 @@ public class Control_InitiativePanel : MonoBehaviour,
     //     check if PlayerInfo has been marked as changed
     //     update displays to match
     // }
+
+    // Update mouse position to enable stat block visual to follow mouse
+    private void Update() {
+        if (statBlockInstance) {
+            statBlockInstance.transform.position = Input.mousePosition;
+        }
+    }
 
     public void SetInitiativePanel(BeingInfo combatant) {
         managedCombatant = combatant;
@@ -148,6 +161,7 @@ public class Control_InitiativePanel : MonoBehaviour,
         // If there is no deletion toggle, or if there is one and it is on, then allow deletion on click
         if (!deletionToggle || deletionToggle.GetComponent<Toggle>().isOn) {
             gameObject.SendMessageUpwards("KillCombatant", gameObject);
+            Destroy(statBlockInstance);
         }
     }
 
@@ -156,9 +170,32 @@ public class Control_InitiativePanel : MonoBehaviour,
         // TODO: Fancy Visual stuff when mouse is over a tab
         gameObject.GetComponent<Image>().color = hoverColor;
 
+        // instantiate stat block visual
+        Vector2 startPos = gameObject.transform.position;
+        Quaternion startRot = gameObject.transform.rotation;
+        statBlockInstance = Instantiate(statBlockVisual, startPos, startRot, GameObject.FindGameObjectWithTag("Canvas").transform);
+
+        string charName = characterName.GetComponent<Text>().text;
+        string charClass = characterClass.GetComponent<Text>().text;
+        string charArmor = characterArmor.GetComponent<Text>().text;
+        Alignment charAlignment = managedCombatant.getAlignment();
+        Size charSize = managedCombatant.getSize();
+        string charHP = managedCombatant.getHP().ToString();
+        string charSTR = managedCombatant.getStat_STR().ToString();
+        string charDEX = managedCombatant.getStat_DEX().ToString();
+        string charCON = managedCombatant.getStat_CON().ToString();
+        string charINT = managedCombatant.getStat_INT().ToString();
+        string charWIS = managedCombatant.getStat_WIS().ToString();
+        string charCHA = managedCombatant.getStat_CHA().ToString();
+
+        // set appropriate fields on stat block visual
+        statBlockInstance.GetComponent<SBVFieldSetter>().setFields(charName, charClass, charArmor, managedCombatant.getCurrentHP() / managedCombatant.getCurrentHP(), charAlignment, charSize, charHP);
+        statBlockInstance.GetComponent<SBVFieldSetter>().setStats(charSTR, charDEX, charCON, charINT, charWIS, charCHA);
+        
     }
 
     public void OnPointerExit(PointerEventData pointerEventData) {
         gameObject.GetComponent<Image>().color = defaultColor;
+        Destroy(statBlockInstance);
     }
 }
