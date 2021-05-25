@@ -27,7 +27,8 @@ public class Control_InitiativePanel : MonoBehaviour,
     // Local reference to the combatant that this InitiativePanel represents
     // ? If PlayerInfo is being modified in multiple locations, do we need to consider race conditions
     private BeingInfo managedCombatant;
-    private GameObject playerName, characterName, characterClass, characterArmor, characterInitiative, characterHealth, characterImage;
+    private GameObject playerName, characterName, characterClass, characterArmor, characterInitiative, characterHealth, characterImage, characterStatus,
+        statusUpdater, statusToAdd, statusToDelete;
     // Any variables that can be modified in combat and need to be reset when combat finishes
     // The modification amount
     private short modInitiative = 0, modAC = 0;
@@ -46,6 +47,10 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterInitiative = transform.Find("CharInit/Val_Init").gameObject;
         characterHealth = transform.Find("HealthDisplay").gameObject;
         characterImage = transform.Find("CharImage").gameObject;
+        characterStatus = transform.Find("CharStatus").gameObject;
+        statusUpdater = transform.Find("StatusUpdater").gameObject;
+        statusToAdd = transform.Find("StatusToAdd").gameObject;
+        statusToDelete = transform.Find("StatusToDelete").gameObject;
 
         deletionToggle = GameObject.FindWithTag("DeletionToggle").gameObject;
     }
@@ -78,6 +83,8 @@ public class Control_InitiativePanel : MonoBehaviour,
             characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
             characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
 
+            characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+
             // TODO: Change to read from a monster image dictionary
             characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(monster.getType());
 
@@ -95,6 +102,8 @@ public class Control_InitiativePanel : MonoBehaviour,
 
         characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
         characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
+
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
 
         characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(player.getCharacterClass());
     }
@@ -197,5 +206,87 @@ public class Control_InitiativePanel : MonoBehaviour,
     public void OnPointerExit(PointerEventData pointerEventData) {
         gameObject.GetComponent<Image>().color = defaultColor;
         Destroy(statBlockInstance);
+    }
+    public void resetStatus()
+    {
+        managedCombatant.resetStatusCondition();
+    }
+
+    //bunch of add status condition fcns
+    //not elegent but hey, it should work :)
+    public void addBlinded()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.BLINDED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addCharmed()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.CHARMED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addDeafened()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.DEAFENED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addFrightened()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.FRIGHTENED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addGrappled()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.GRAPPLED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addIncapacitated()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.INCAPACITATED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addInvisible()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.INVISIBLE);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addParalyzed()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.PARALYZED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addPetrified()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.PETRIFIED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addPoisoned()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.POISONED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addProne()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.PRONE);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addRestrained()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.RESTRAINED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addStunned()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.STUNNED);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addUnconscious()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.UNCONSCIOUS);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+    }
+    public void addExhausted()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.EXHAUSTION);
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
     }
 }

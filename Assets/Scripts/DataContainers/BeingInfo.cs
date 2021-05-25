@@ -82,8 +82,26 @@ public abstract class BeingInfo {
     public StatusCondition getStatusCondition(){
         return statusCondition;
     }
-    public void setStatusCondition(StatusCondition toSet){
+    public void setStatusCondition(StatusCondition toSet)
+    {
         statusCondition = toSet;
+    }
+    public void resetStatusCondition()
+    {
+        setStatusCondition(StatusCondition.NONE);
+    }
+    //use bitwise OR to add conditions
+    public void addStatusCondition(StatusCondition toAdd)
+    {
+        statusCondition |= toAdd;
+    }
+    //use bitwise XOR to toggle conditions
+    //Note: if toRemove is not already an actie status, this fcn will serve to add toRemove
+    //and thus make toRemove an active status
+    //This is meant to remove only, but is also capable of adding - try to keep usage separate from addStatusCondition()
+    public void removeStatusCondition(StatusCondition toRemove)
+    {
+        statusCondition ^= toRemove;
     }
 
     public Alignment getAlignment(){
