@@ -113,19 +113,39 @@ public class Control_InitiativePanel : MonoBehaviour,
 
     // Only show the modification if something other than zero
     public void ModifyInitiative(short change) {
-        modInitiative += change;
-        string initString = modInitiative == 0 ? managedCombatant.getInitiative().ToString() :
-            string.Format("{0}{1}", managedCombatant.getInitiative().ToString(), modInitiative.ToString());
+        // To be used when beings have their own initiative
+        // modInitiative += change;
+        // string initString = modInitiative == 0 ? managedCombatant.getInitiative().ToString() :
+        //     string.Format("{0}{1}", managedCombatant.getInitiative().ToString(), modInitiative.ToString());
 
-        characterInitiative.GetComponent<Text>().text = initString;
+        // characterInitiative.GetComponent<Text>().text = initString;
+        managedCombatant.setInitiative(change);
+        characterInitiative.GetComponent<Text>().text = change.ToString();
+        // Tell the initiative queue that something important changed that can affect order of combatants
+        SendMessageUpwards("UpdateQueue");
+    }
+
+    // Accepts the contents of an input field
+    public void ModifyInitiative(string change) {
+        short change_val;
+        try {
+            change_val = System.Convert.ToInt16(change);
+        } catch {
+            Debug.Log("Initaitve input invalid, must be integer in range");
+            return;
+        }
+        change_val = (short) Mathf.Clamp(change_val, 1, 30);
+
+        ModifyInitiative(change_val);
     }
 
     public void ModifyArmorClass(short change) {
         modAC += change;
         string acString = modAC == 0 ? managedCombatant.getAC().ToString() :
-            string.Format("{0}{1}", managedCombatant.getAC().ToString(), modAC.ToString());
-        
+            string.Format("{0}+{1}", managedCombatant.getAC().ToString(), modAC.ToString());
+
         characterArmor.GetComponent<Text>().text = acString;
+
     }
 
     // Positive health changes are heals, negative is damange
@@ -149,11 +169,14 @@ public class Control_InitiativePanel : MonoBehaviour,
     public void ResetModifications() {
         ResetArmor();
         ResetInitiative();
+        resetStatus();
     }
     
     public void ResetInitiative() {
-        modInitiative = 0;
-        characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
+        // To be used when combatants have their own initiative
+        // modInitiative = 0;
+        // characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
+        ModifyInitiative(0);
     }
 
     public void ResetArmor() {
@@ -161,9 +184,12 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterArmor.GetComponent<Text>().text = managedCombatant.getAC().ToString();
     }
 
-    // TODO: Replace return with common parent type
     public BeingInfo GetCombatant() {
         return managedCombatant;
+    }
+
+    public short GetCombatantInitaitve() {
+        return managedCombatant.getInitiative();
     }
 
     // EVENT CONTROLLERS //
@@ -173,6 +199,7 @@ public class Control_InitiativePanel : MonoBehaviour,
         // If there is no deletion toggle, or if there is one and it is on, then allow deletion on click
         if (!deletionToggle || deletionToggle.GetComponent<Toggle>().isOn) {
             gameObject.SendMessageUpwards("KillCombatant", gameObject);
+            ResetModifications();
             Destroy(statBlockInstance);
         }
     }
