@@ -654,6 +654,7 @@ MonoBehaviour:
   monsterArmorClass: {fileID: 1383923219495105509}
   monsterCount: {fileID: 234793672}
   monsterImage: {fileID: 1383923219119605127}
+  monstDict: {fileID: 11400000, guid: 1e391098f5629c943b999267cf2a51a9, type: 2}
 --- !u!114 &1896958396
 MonoBehaviour:
   m_ObjectHideFlags: 0

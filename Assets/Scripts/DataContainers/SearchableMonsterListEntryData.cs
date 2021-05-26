@@ -15,6 +15,8 @@ public class SearchableMonsterListEntryData : MonoBehaviour
 	public TMP_InputField monsterCount;
     public Image monsterImage;
 
+    public MonsterSpriteDictionary monstDict;
+
 	// Unity Methods
 	void Awake() {
 		monsterCount.contentType = TMP_InputField.ContentType.IntegerNumber;
@@ -39,7 +41,7 @@ public class SearchableMonsterListEntryData : MonoBehaviour
         monsterChallengeRating.text = $"CR: {monster.getChallengeRating()}";
 
         // monster sprite
-        Sprite possibleSprite = MonsterSpriteDictionary.GetSpriteFromType(monster.getType());
+        Sprite possibleSprite = monstDict.GetSpriteFromType(monster.getType());
         if (possibleSprite != null) {
             monsterImage.sprite = possibleSprite;
         }

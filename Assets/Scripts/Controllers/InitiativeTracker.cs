@@ -13,8 +13,6 @@ public class InitiativeTracker : MonoBehaviour {
 	[Tooltip("Optional Transform to hold characters that have completed turn")]
 	public Transform endTurnHoldingPen;
 
-	[Tooltip("A ScriptableObject that holds the class name, class image dictionary")]
-	public CharClassImage classDict;
 
 	// Other fields
 	List<GameObject> linkedListStandIn;
