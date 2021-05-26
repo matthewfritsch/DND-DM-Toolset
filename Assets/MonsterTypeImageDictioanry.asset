@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39365d32e923b0646a6da075f6ab2d8b, type: 3}
+  m_Name: MonsterTypeImageDictioanry
+  m_EditorClassIdentifier: 
+  monstImage:
+  - monst_type: Abberation
+    monst_image: {fileID: 21300000, guid: 5d16f4b7ec5328c4b911ab077f80ee30, type: 3}
+  - monst_type: Beast
+    monst_image: {fileID: 21300000, guid: ef9b34a970c5b2f4798a1714e3cd4fee, type: 3}
+  - monst_type: Celestial
+    monst_image: {fileID: 21300000, guid: 4080d35af01b25344a3840519daba5e3, type: 3}
+  - monst_type: Construct
+    monst_image: {fileID: 21300000, guid: 46526089ab05164458f5dd5370928f9d, type: 3}
+  - monst_type: Dragon
+    monst_image: {fileID: 21300000, guid: 4fac1b23caed5c940bb40a50ab029216, type: 3}
+  - monst_type: Elemental
+    monst_image: {fileID: 21300000, guid: 0d24e33e5c64bca46b516067ac88ab7d, type: 3}
+  - monst_type: Fey
+    monst_image: {fileID: 21300000, guid: e62f183768d1b834e8f6bb730711e7e1, type: 3}
+  - monst_type: Fiend
+    monst_image: {fileID: 21300000, guid: 858c2657b4b625a4bafe593578d82d96, type: 3}
+  - monst_type: Fiend (Demon)
+    monst_image: {fileID: 21300000, guid: 5cb8a593c4cae9a4f959b4f7ecd35195, type: 3}
+  - monst_type: Fiend (Devil)
+    monst_image: {fileID: 21300000, guid: 461ccccd55e0a52468d1a8fd65558abf, type: 3}
+  - monst_type: Giant
+    monst_image: {fileID: 21300000, guid: c8b01ec442007154a9afc60b457eb05a, type: 3}
+  - monst_type: Humanoid
+    monst_image: {fileID: 21300000, guid: c70ee0bb29d8fc4458bf95ff73870459, type: 3}
+  - monst_type: Monstrosity
+    monst_image: {fileID: 21300000, guid: 778521598fb279045bb6e5edbc02afb3, type: 3}
+  - monst_type: Ooze
+    monst_image: {fileID: 21300000, guid: 45356a90e68934741bc7fd607a3e9893, type: 3}
+  - monst_type: Plant
+    monst_image: {fileID: 21300000, guid: c53eeab18ced9ed41abe3406c3012fd9, type: 3}
+  - monst_type: Undead
+    monst_image: {fileID: 21300000, guid: e21ae967969dc6447930ae65d8e49f2a, type: 3}
+  defaultImage: {fileID: 21300000, guid: d810a9af75a373c478d308955356ea37, type: 3}

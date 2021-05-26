@@ -13,10 +13,12 @@ public class Control_InitiativePanel : MonoBehaviour,
         IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
     // private Color defaultColor = gameObject.GetComponent<Image>().color;
+    [Tooltip("A ScriptableObject that holds the class name, class image dictionary")]
     public CharClassImage classImageDictionary;
+	[Tooltip("A ScriptableObject that holds the monster type, monster image dictionary")]
+	public MonsterSpriteDictionary monsterImageDictionary;
+
     public GameObject deletionToggle;
-    // TODO: Add monster image dictionary
-    // public MonsterImage monsterImageDictionary;
 
     // stat block visual prefab reference
     public GameObject statBlockVisual;
@@ -87,7 +89,7 @@ public class Control_InitiativePanel : MonoBehaviour,
             characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
 
             // TODO: Change to read from a monster image dictionary
-            characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(monster.getType());
+            characterImage.GetComponent<Image>().sprite = monsterImageDictionary.GetSpriteFromType(monster.getType());
 
             return;
         }
