@@ -29,7 +29,9 @@ public class Control_InitiativePanel : MonoBehaviour,
     // Local reference to the combatant that this InitiativePanel represents
     // ? If PlayerInfo is being modified in multiple locations, do we need to consider race conditions
     private BeingInfo managedCombatant;
-    private GameObject playerName, characterName, characterClass, characterArmor, characterInitiative, characterHealth, characterImage;
+    private GameObject playerName, characterName, characterClass, characterArmor, characterInitiative, characterHealth, characterImage, characterStatus;
+    //private GameObject statusUpdater, statusToAdd, statusToDelete;
+
     // Any variables that can be modified in combat and need to be reset when combat finishes
     // The modification amount
     private short modInitiative = 0, modAC = 0;
@@ -48,6 +50,10 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterInitiative = transform.Find("CharInit/Val_Init").gameObject;
         characterHealth = transform.Find("HealthDisplay").gameObject;
         characterImage = transform.Find("CharImage").gameObject;
+        characterStatus = transform.Find("CharStatus").gameObject;
+        //statusUpdater = transform.Find("StatusUpdater").gameObject;
+        //statusToAdd = transform.Find("StatusToAdd").gameObject;
+        //statusToDelete = transform.Find("StatusToDelete").gameObject;
 
         deletionToggle = GameObject.FindWithTag("DeletionToggle").gameObject;
     }
@@ -80,6 +86,8 @@ public class Control_InitiativePanel : MonoBehaviour,
             characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
             characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
 
+            characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+
             // TODO: Change to read from a monster image dictionary
             characterImage.GetComponent<Image>().sprite = monsterImageDictionary.GetSpriteFromType(monster.getType());
 
@@ -98,24 +106,46 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterHealth.GetComponentInChildren<Text>().text = string.Format("{0}/{1}", managedCombatant.getCurrentHP(), managedCombatant.getHP());
         characterHealth.GetComponentInChildren<Image>().fillAmount = (managedCombatant.getCurrentHP()/managedCombatant.getCurrentHP());
 
+        characterStatus.GetComponent<Text>().text += managedCombatant.getStatusCondition().ToString();
+
         characterImage.GetComponent<Image>().sprite = classImageDictionary.GetClassImage(player.getCharacterClass());
     }
 
     // Only show the modification if something other than zero
     public void ModifyInitiative(short change) {
-        modInitiative += change;
-        string initString = modInitiative == 0 ? managedCombatant.getInitiative().ToString() :
-            string.Format("{0}{1}", managedCombatant.getInitiative().ToString(), modInitiative.ToString());
+        // To be used when beings have their own initiative
+        // modInitiative += change;
+        // string initString = modInitiative == 0 ? managedCombatant.getInitiative().ToString() :
+        //     string.Format("{0}{1}", managedCombatant.getInitiative().ToString(), modInitiative.ToString());
 
-        characterInitiative.GetComponent<Text>().text = initString;
+        // characterInitiative.GetComponent<Text>().text = initString;
+        managedCombatant.setInitiative(change);
+        characterInitiative.GetComponent<Text>().text = change.ToString();
+        // Tell the initiative queue that something important changed that can affect order of combatants
+        SendMessageUpwards("UpdateQueue");
+    }
+
+    // Accepts the contents of an input field
+    public void ModifyInitiative(string change) {
+        short change_val;
+        try {
+            change_val = System.Convert.ToInt16(change);
+        } catch {
+            Debug.Log("Initaitve input invalid, must be integer in range");
+            return;
+        }
+        change_val = (short) Mathf.Clamp(change_val, 1, 30);
+
+        ModifyInitiative(change_val);
     }
 
     public void ModifyArmorClass(short change) {
         modAC += change;
         string acString = modAC == 0 ? managedCombatant.getAC().ToString() :
-            string.Format("{0}{1}", managedCombatant.getAC().ToString(), modAC.ToString());
-        
+            string.Format("{0}+{1}", managedCombatant.getAC().ToString(), modAC.ToString());
+
         characterArmor.GetComponent<Text>().text = acString;
+
     }
 
     // Positive health changes are heals, negative is damange
@@ -139,11 +169,14 @@ public class Control_InitiativePanel : MonoBehaviour,
     public void ResetModifications() {
         ResetArmor();
         ResetInitiative();
+        resetStatus();
     }
     
     public void ResetInitiative() {
-        modInitiative = 0;
-        characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
+        // To be used when combatants have their own initiative
+        // modInitiative = 0;
+        // characterInitiative.GetComponent<Text>().text = managedCombatant.getInitiative().ToString();
+        ModifyInitiative(0);
     }
 
     public void ResetArmor() {
@@ -151,9 +184,12 @@ public class Control_InitiativePanel : MonoBehaviour,
         characterArmor.GetComponent<Text>().text = managedCombatant.getAC().ToString();
     }
 
-    // TODO: Replace return with common parent type
     public BeingInfo GetCombatant() {
         return managedCombatant;
+    }
+
+    public short GetCombatantInitaitve() {
+        return managedCombatant.getInitiative();
     }
 
     // EVENT CONTROLLERS //
@@ -163,6 +199,7 @@ public class Control_InitiativePanel : MonoBehaviour,
         // If there is no deletion toggle, or if there is one and it is on, then allow deletion on click
         if (!deletionToggle || deletionToggle.GetComponent<Toggle>().isOn) {
             gameObject.SendMessageUpwards("KillCombatant", gameObject);
+            ResetModifications();
             Destroy(statBlockInstance);
         }
     }
@@ -199,5 +236,94 @@ public class Control_InitiativePanel : MonoBehaviour,
     public void OnPointerExit(PointerEventData pointerEventData) {
         gameObject.GetComponent<Image>().color = defaultColor;
         Destroy(statBlockInstance);
+    }
+
+
+    private void addStatusText() {
+        characterStatus.GetComponent<Text>().text = "Status: " + managedCombatant.getStatusCondition().ToString();
+    }
+    public void resetStatus()
+    {
+        managedCombatant.resetStatusCondition();
+        addStatusText();
+    }
+
+    //bunch of add status condition fcns
+    //not elegent but hey, it should work :)
+
+    public void addBlinded()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.BLINDED);
+        addStatusText();
+    }
+    public void addCharmed()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.CHARMED);
+        addStatusText();
+    }
+    public void addDeafened()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.DEAFENED);
+        addStatusText();
+    }
+    public void addFrightened()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.FRIGHTENED);
+        addStatusText();
+    }
+    public void addGrappled()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.GRAPPLED);
+        addStatusText();
+    }
+    public void addIncapacitated()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.INCAPACITATED);
+        addStatusText();
+    }
+    public void addInvisible()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.INVISIBLE);
+        addStatusText();
+    }
+    public void addParalyzed()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.PARALYZED);
+        addStatusText();
+    }
+    public void addPetrified()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.PETRIFIED);
+        addStatusText();
+    }
+    public void addPoisoned()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.POISONED);
+        addStatusText();
+    }
+    public void addProne()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.PRONE);
+        addStatusText();
+    }
+    public void addRestrained()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.RESTRAINED);
+        addStatusText();
+    }
+    public void addStunned()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.STUNNED);
+        addStatusText();
+    }
+    public void addUnconscious()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.UNCONSCIOUS);
+        addStatusText();
+    }
+    public void addExhausted()
+    {
+        managedCombatant.addStatusCondition(StatusCondition.EXHAUSTION);
+        addStatusText();
     }
 }
