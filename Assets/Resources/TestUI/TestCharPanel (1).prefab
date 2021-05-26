@@ -559,10 +559,10 @@ RectTransform:
   m_Father: {fileID: 1931030421227585879}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 90, y: 0}
-  m_SizeDelta: {x: 120, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 80, y: 0}
+  m_SizeDelta: {x: -160, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &236904273480457230
 CanvasRenderer:
@@ -2914,7 +2914,7 @@ GameObject:
   - component: {fileID: 3176349158023915712}
   - component: {fileID: 717715395911024003}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: Button_Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2936,8 +2936,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 49.9, y: 38.5}
-  m_SizeDelta: {x: -109.8511, y: -84.084}
+  m_AnchoredPosition: {x: 58.5, y: 38.5}
+  m_SizeDelta: {x: -123, y: -83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2321870989566976959
 CanvasRenderer:
@@ -2974,7 +2974,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 12
-    m_Alignment: 3
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -3436,7 +3436,7 @@ GameObject:
   - component: {fileID: 3959077173918927486}
   - component: {fileID: 2107242938297718398}
   m_Layer: 0
-  m_Name: Text
+  m_Name: Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
