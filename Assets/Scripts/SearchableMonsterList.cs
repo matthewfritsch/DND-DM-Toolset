@@ -29,7 +29,7 @@ public class SearchableMonsterList : MonoBehaviour {
         data = new BeingInfoList();
 
         // parse through the data
-        parser = new MonsterParser(Application.dataPath + "/monsters.csv");
+        parser = new MonsterParser();
         List<MonsterInfo> parsedData = parser.read();
 
         // iterate through parsed data to add to data

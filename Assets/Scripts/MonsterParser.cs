@@ -1,20 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class MonsterParser{
 
-    private string filepath;
-
-    public MonsterParser(string newFilePath){
-        filepath = newFilePath;
-    }
+    // used in Resources.Load when loading up the monsters
+    public const string monstersFilename = "monsters";
 
     public List<MonsterInfo> read(){
 
         List<MonsterInfo> toRet = new List<MonsterInfo>();
-        string[] linesFromFile = System.IO.File.ReadAllLines(filepath);
-        foreach(string line in linesFromFile){
+        TextAsset monstersTextAsset = Resources.Load<TextAsset>(monstersFilename);
+        string[] linesFromFile = monstersTextAsset.text.Split('\n');
+        foreach (string line in linesFromFile){
             string[] fields = line.Split(',');
             string monsterName = fields[0];
             if(monsterName == "Name") continue;

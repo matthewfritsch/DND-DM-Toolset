@@ -1728,7 +1728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6765112802183783195, guid: e42562f026436b8458af92711c6d0bef, type: 3}
       propertyPath: m_Name
-      value: Button_Options
+      value: Button_Quit
       objectReference: {fileID: 0}
     - target: {fileID: 6765112802183783195, guid: e42562f026436b8458af92711c6d0bef, type: 3}
       propertyPath: m_IsActive
