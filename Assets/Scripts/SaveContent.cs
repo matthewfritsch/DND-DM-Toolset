@@ -12,7 +12,12 @@ public class SaveContent : MonoBehaviour
     public GameObject maxHPInput;
 
     public PlayerInfo newPlayerInfo;
+<<<<<<< HEAD:Assets/SaveContent.cs
     public PlayerInfoList globalPlayerList = new PlayerInfoList();
+=======
+    // public PlayerInfoList globalPlayerList = new PlayerInfoList();
+    public updatePlayerList updatePlayerList;
+>>>>>>> c488d19aa13f90577fe28eba5727ed382e12dcb3:Assets/Scripts/SaveContent.cs
     // Start is called before the first frame update
     public void SaveInput()
     {
@@ -31,8 +36,15 @@ public class SaveContent : MonoBehaviour
         int intMaxHP = int.Parse(maxHP);
 
         newPlayerInfo = new PlayerInfo(playerName, characterName, characterClass, intArmorClass, intMaxHP);
-        globalPlayerList.addPlayer(newPlayerInfo);
+        // Debug.Log($"Adding {playerName}, {characterName}: {newPlayerInfo.getPlayerName()}");
+        // globalPlayerList.addPlayer(newPlayerInfo);
+        GlobalPlayers.Instance.AddPlayer(newPlayerInfo);
 
+<<<<<<< HEAD:Assets/SaveContent.cs
+=======
+        // updatePlayerList.UpdatePL(playerName);
+
+>>>>>>> c488d19aa13f90577fe28eba5727ed382e12dcb3:Assets/Scripts/SaveContent.cs
         playerNameInput.GetComponent<TMP_InputField>().text = "";
         characterNameInput.GetComponent<TMP_InputField>().text = "";
         characterClassInput.GetComponent<TMP_InputField>().text = "";
