@@ -12,6 +12,8 @@ Project Members:
   
   Matthew Fritsch: Team Member
 
+## User Manual
+https://dnd-dmts-docs.readthedocs.io/
 
 ## Repository Structure
 The repository is based around Unity with a commonly used gitignore file. All files in the repository should be mandatory for building the product. 
