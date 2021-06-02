@@ -12,6 +12,9 @@ Project Members:
   
   Matthew Fritsch: Team Member
 
+## Installation Instructions
+Download the appropriate release on https://github.com/matthewfritsch/DND-DM-Toolset/releases . Extract the files into any folder and then run the executable inside.
+
 ## User Manual
 https://dnd-dmts-docs.readthedocs.io/
 
